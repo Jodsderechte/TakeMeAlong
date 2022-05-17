@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mainpage</title>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet"
+	href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+	integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+	crossorigin="" />
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+	integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+	crossorigin=""></script>
+
+<script src="js/osmFunctions.js"></script>
+
+</head>
+<body>
+	<div class="mainContainer">
+		<header>
+			<div>
+				<span style="white-space: nowrap"> Benutzer: <input
+					id="userNameLogin" type="text" name="userName" required />
+				</span> <span style="white-space: nowrap"> Password: <input
+					id="passwordLogin" type="password" name="password" required />
+				</span>
+				<button type="button" style="width: 100px;">Anmelden</button>
+				<span style="white-space: nowrap"> <a href="http://localhost:8080/Softwaretechnik%20Projekt/Registrierung.html">Als neuen Benutzer Registrieren</a> </span>
+				
+			</div>
+			
+		</header>
+		<article>
+			<div id="mapid" style="height: 100%;"></div>
+		</article>
+		
+		<aside>
+          <h3>Eingabe der Adresse</h3>
+          <table>
+            <tr>
+			  <td>Straße</td>
+			  <td><input id="street" type="text" name="street" size="25" /> 
+			      <span style="float: right;"> Nr: <input id="streetNr" type="text" name="streetNr" size="4" /> </span>
+			  </td>
+		    </tr>
+		    <tr>
+			  <td>PLZ</td>
+			  <td><input id="zip" type="text" name="zip" size="5" /> <span style="float: right;"> Ort <input id="city" type="text" name="city"
+					size="25" /> </span>
+			 </td>
+		   </tr>
+		   <tr>
+			   <td> &nbsp;</td>
+			   <td align="left">
+				<button id="showBtn" type="button" style="width: 100px; height: 30px;">Anzeigen</button>
+			   </td>
+		    </tr>
+          </table>
+          <hr/>
+          <div id="out">
+          
+          
+          </div>
+        </aside>
+	</div>
+</body>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
