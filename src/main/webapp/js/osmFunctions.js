@@ -32,6 +32,14 @@ window.onload = function() {
 	});
 	var button = document.querySelector("#showBtn");
 	button.onclick = setMarker;
+	let token = sessionStorage.getItem('loginToken');
+	if (token != null) {
+		showLoginView();
+	
+	}
+	else {
+		showLoginView();
+	}
 }
 
 function setMarker() {
@@ -108,4 +116,12 @@ function changeMarker(newMarker){
 		}
 		newMarker.setIcon(redIcon)
 		LastMarker = newMarker            
+}
+
+function showLoginView(){
+	let aside = document.getElementById('aside')
+	aside.style.display = "none";
+	let mainContainer = document.getElementById('mainContainer');
+	mainContainer.style.gridTemplateAreas = '"login" "map"';
+	
 }
