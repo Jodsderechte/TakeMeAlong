@@ -54,7 +54,17 @@ span + span {
 	margin-left: 100px;
 	
 }
-.RegisterContainer{
+#RegisterContainer {
+	position: absolute;
 	grid-area: RegisterContainer;
-	display: none
-}
+	display: none;
+	top: 30%;
+	right: calc(70% - 470px);
+	width: 400px;
+	height: 215px;
+	border-bottom: 2px solid #fff;
+    background: white;
+    border: 2px solid black;
+    border-style: solid;
+    border-radius: 20px;
+	}

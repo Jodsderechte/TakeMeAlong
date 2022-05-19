@@ -17,6 +17,21 @@
 
 </head>
 <body>
+		<div id =RegisterContainer class ="RegisterContainer">
+			<form action="" method = GET>
+		  <table>
+					<tr> <td>Vorname</td> <td colspan ="2"> <input size = "35" type = "text" id = "Vorname" name = "Vorname" placeholder="Max"> </td></tr>
+					<tr> <td>Nachname</td> <td colspan ="2"> <input size = "35" type = "text" id = "Nachname" name = "Nachname" placeholder="Mustermann"></td></tr>
+					<tr> <td>Straße </td> <td> <input size = "9" type = "text" id = "Straße" name = "Straße" placeholder="Hauptstraße"></td> <td>Nr. <input size = "5" type = "Number" id = "NR" name = "NR" placeholder="1"> </td></tr>
+					<tr> <td>PLZ</td> <td><input size = "5" type = "number" id = "PLZ" name = "PLZ" placeholder="66482">  </td><td>Ort.<input size="15" type = "text" id = "Ort" name = "Ort" placeholder="Zweibrücken"></td></tr>
+					<tr> <td>E-Mail</td> <td colspan ="2"><input size = "35" type = "email" id = "E-Mail" name = "E-Mail" placeholder="MusterMail@hs-kl.de" ></td></tr>
+					<tr> <td>Benutzer-ID</td> <td colspan ="2"> <input size = "35" type = "text" id = "Benutzer-ID" name = "Benutzer-ID" placeholder="TolleId" ></td></tr>
+					<tr> <td>Passwort</td> <td colspan ="2"> <input size = "35" type = "password" id = "Passwort" name = "Passwort" placeholder="Geheim" ></td></tr>
+					<tr> <td><button type="submit">Registrieren</button></td> <td><button type="reset">Abbrechen</button></td> </tr>
+					
+				</table>			
+			</form>
+		</div>
 	<div id= "mainContainer" class="mainContainer">
 		<header>
 			<div id=login>
@@ -34,23 +49,6 @@
 		</header>
 		<article id =map>
 			<div id="mapid" style="height: 100%;"></div>
-		</article>
-		<article id =RegisterContainer class ="RegisterContainer">
-			<form action="" method = GET>
-				<table>
-					<tr></tr>
-					<tr> <td>Vorname</td> <td><input type = "text" id = "Vorname" name = "Vorname"> </td></tr>
-					<tr> <td>Nachname</td> <td><input type = "text" id = "Nachname" name = "Nachname"></td></tr>
-					<tr> <td>Straße </td> <td><input type = "text" id = "Straße" name = "Straße"> Nr.<input type = "number" id = "NR" name = "NR"></td></tr>
-					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ">  Ort.<input type = "text" id = "Ort" name = "Ort"></td></tr>
-					<tr> <td>E-Mail</td> <td><input type = "email" id = "E-Mail" name = "E-Mail"></td></tr>
-					<tr> <td>Benutzer-ID</td> <td><input type = "text" id = "Benutzer-ID" name = "Benutzer-ID"></td></tr>
-					<tr> <td>Passwort</td> <td><input type = "password" id = "Passwort" name = "Passwort"></td></tr>
-					<tr> <td><button type="submit">Registrieren</button></td> <td><button type="reset">Abbrechen</button></td> </tr>
-
-
-				</table>			
-			</form>
 		</article>
 		<aside id=aside>
           <h3>Eingabe der Adresse</h3>

@@ -47,12 +47,12 @@ window.onload = function() {
 
 
 function showRegisterView() {
-	let mainContainer = document.getElementById('mainContainer');
 	let Register = document.getElementById('RegisterContainer');
+	let map = document.getElementById('mapid');
 	Register.style.display = "block";
-	mainContainer.style.gridTemplateAreas = '"login login login" "map RegisterContainer map"';
-    ;
-	
+	map.style.zIndex = 7;
+	Register.style.zIndex = 8;
+    
 }	
 
 function setMarker() {
@@ -148,6 +148,7 @@ function showLoggedinView(){
 	mainContainer.style.gridTemplateAreas = '"login" "map"';
 	
 }
+/*
 window.onresize = function(){
 	let widthOutput = window.innerWidth;
 	if(IsInLoginView&widthOutput>700) {
@@ -160,5 +161,4 @@ window.onresize = function(){
     ; 
    
 }
-
-};
+}; */
