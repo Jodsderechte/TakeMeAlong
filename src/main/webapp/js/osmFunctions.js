@@ -3,7 +3,8 @@ var redIcon;
 var blueIcon;
 var LocationList = [];
 var LastMarker;
-var MarkerList = []
+var MarkerList = [];
+var IsInLoginView;
 window.onload = function() {
 	myMap = L.map('mapid').setView([49.250723, 7.377122], 13);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -32,15 +33,27 @@ window.onload = function() {
 	});
 	var button = document.querySelector("#showBtn");
 	button.onclick = setMarker;
+	var RegisterButton = document.getElementById("Register");
+	RegisterButton.onclick = showRegisterView;
 	let token = sessionStorage.getItem('loginToken');
 	if (token != null) {
-		showLoginView();
+		showLoggedinView();
 	
 	}
 	else {
 		showLoginView();
 	}
 }
+
+
+function showRegisterView() {
+	let mainContainer = document.getElementById('mainContainer');
+	let Register = document.getElementById('RegisterContainer');
+	Register.style.display = "block";
+	mainContainer.style.gridTemplateAreas = '"login login login" "map RegisterContainer map"';
+    ;
+	
+}	
 
 function setMarker() {
 	var street = document.querySelector("#street").value;
@@ -120,8 +133,32 @@ function changeMarker(newMarker){
 
 function showLoginView(){
 	let aside = document.getElementById('aside')
+	IsInLoginView = true
 	aside.style.display = "none";
 	let mainContainer = document.getElementById('mainContainer');
 	mainContainer.style.gridTemplateAreas = '"login" "map"';
 	
 }
+
+function showLoggedinView(){
+	let aside = document.getElementById('aside')
+	aside.style.display = "block";
+	IsInLoginView = false;
+	let mainContainer = document.getElementById('mainContainer');
+	mainContainer.style.gridTemplateAreas = '"login" "map"';
+	
+}
+window.onresize = function(){
+	let widthOutput = window.innerWidth;
+	if(IsInLoginView&widthOutput>700) {
+	let mainContainer = document.getElementById('mainContainer');
+	mainContainer.style.gridTemplateAreas = '"login" "map"';
+	}
+	else if(widthOutput>700){
+	let mainContainer = document.getElementById('mainContainer');
+	mainContainer.style.gridTemplateAreas = '"login" "map"';
+    ; 
+   
+}
+
+};

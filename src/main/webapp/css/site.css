@@ -4,30 +4,22 @@
 .mainContainer { 
   height:100vh; 
   display: grid; 
-  grid-template-rows: auto 4fr 2fr; 
-  grid-template-columns: 100%; 
+  grid-template-rows: 75px auto; 
+  grid-template-columns:  auto minmax; 
   grid-template-areas:  
     "login" 
     "map"  
-	"register" 
+
  ; 
 } 
-
+ /*
 @media screen and (min-width: 44.001em) { 
   .mainContainer { 
     height:100vh; 
     grid-template-rows:  75px auto; 
-    /*grid-template-columns: 80% 20%; */
-    grid-template-columns: auto minmax(350px, 350px);
-    grid-template-areas:  
-      "login      login" 
-      "map        register" 
-    ; 
-  } 
-  
-}
-
-
+    grid-template-columns: auto minmax;
+     } 
+}*/
 header {
 	padding: 15px;
 	border-bottom: 1px solid #fff;
@@ -61,4 +53,8 @@ span + span {
 	float: right;	
 	margin-left: 100px;
 	
+}
+.RegisterContainer{
+	grid-area: RegisterContainer;
+	display: none
 }

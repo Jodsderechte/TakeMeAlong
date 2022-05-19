@@ -17,9 +17,9 @@
 
 </head>
 <body>
-	<div class="mainContainer">
+	<div id= "mainContainer" class="mainContainer">
 		<header>
-			<div>
+			<div id=login>
 			<span class=WebsiteName-text style="white-space:nowrap;font-weight:bold;font-size: xx-large;"> Carpooling</span>
 				<span class=login style="white-space: nowrap"> Benutzer: <input
 					id="userNameLogin" type="text" name="userName" required />
@@ -27,13 +27,30 @@
 					id="passwordLogin" type="password" name="password" required />
 				</span>
 				<button class=login type="button" style="width: 100px;">Anmelden</button>
-				<span class=Register style="white-space: nowrap"> <a href="http://localhost:8080/Softwaretechnik%20Projekt/Registrierung.html">Als neuen Benutzer Registrieren</a> </span>
+				<span class=Register style="white-space: nowrap"> <input type = "button" class="Register" id ="Register" value = "Als neuen Benutzer Registrieren"></a> </span>
 				
 			</div>
 			
 		</header>
-		<article>
+		<article id =map>
 			<div id="mapid" style="height: 100%;"></div>
+		</article>
+		<article id =RegisterContainer class ="RegisterContainer">
+			<form action="" method = GET>
+				<table>
+					<tr></tr>
+					<tr> <td>Vorname</td> <td><input type = "text" id = "Vorname" name = "Vorname"> </td></tr>
+					<tr> <td>Nachname</td> <td><input type = "text" id = "Nachname" name = "Nachname"></td></tr>
+					<tr> <td>Straße </td> <td><input type = "text" id = "Straße" name = "Straße"> Nr.<input type = "number" id = "NR" name = "NR"></td></tr>
+					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ">  Ort.<input type = "text" id = "Ort" name = "Ort"></td></tr>
+					<tr> <td>E-Mail</td> <td><input type = "email" id = "E-Mail" name = "E-Mail"></td></tr>
+					<tr> <td>Benutzer-ID</td> <td><input type = "text" id = "Benutzer-ID" name = "Benutzer-ID"></td></tr>
+					<tr> <td>Passwort</td> <td><input type = "password" id = "Passwort" name = "Passwort"></td></tr>
+					<tr> <td><button type="submit">Registrieren</button></td> <td><button type="reset">Abbrechen</button></td> </tr>
+
+
+				</table>			
+			</form>
 		</article>
 		<aside id=aside>
           <h3>Eingabe der Adresse</h3>
