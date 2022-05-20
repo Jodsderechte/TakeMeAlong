@@ -45,6 +45,9 @@ span + span {
     margin-left: 5px;
 }
 
+table{
+	white-space:nowrap;
+}
 .WebsiteName-text{
 	float: left;
 	margin-right: 100px;	
@@ -54,6 +57,18 @@ span + span {
 	margin-left: 100px;
 	
 }
+#Straße{
+	width:85px;
+}
+#NR{
+	width:40px;
+}
+#PLZ{
+	width:55px;
+}
+#Ort{
+	width:75px;
+}
 #RegisterContainer {
 	position: absolute;
 	grid-area: RegisterContainer;
@@ -61,10 +76,9 @@ span + span {
 	top: 30%;
 	right: calc(70% - 470px);
 	width: 400px;
-	height: 215px;
+	height: 350px;
 	border-bottom: 2px solid #fff;
     background: white;
     border: 2px solid black;
-    border-style: solid;
     border-radius: 20px;
 	}

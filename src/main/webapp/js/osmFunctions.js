@@ -35,6 +35,14 @@ window.onload = function() {
 	button.onclick = setMarker;
 	var RegisterButton = document.getElementById("Register");
 	RegisterButton.onclick = showRegisterView;
+	var RegistrierenKnopf = document.getElementById("Registrieren");
+	RegistrierenKnopf.onclick = register;
+	var CancelRegisterButton = document.getElementById("CancelRegister");
+	CancelRegisterButton.onclick = hideRegisterView;
+	var input = document.querySelector("#Passwort");
+	input.addEventListener("keyup",function() {var passwd = input.value;checkPassword( passwd ); },false );
+
+	
 	let token = sessionStorage.getItem('loginToken');
 	if (token != null) {
 		showLoggedinView();
@@ -53,7 +61,13 @@ function showRegisterView() {
 	map.style.zIndex = 7;
 	Register.style.zIndex = 8;
     
-}	
+}
+function hideRegisterView() {
+	let Register = document.getElementById('RegisterContainer');
+	let map = document.getElementById('mapid');
+	Register.style.display = "none";
+}
+	
 
 function setMarker() {
 	var street = document.querySelector("#street").value;
@@ -162,3 +176,73 @@ window.onresize = function(){
    
 }
 }; */
+
+function register() {
+console.log("register")
+	let file = document.getElementById("Profilbild").files[0];
+	var reader = new FileReader();
+
+	if (file) {
+		reader.readAsDataURL(file);
+		reader.onload = function() {
+			let data = {
+				username: document.querySelector("#registerUsername").value,
+				password: document.querySelector("#registerPassword").value,
+				profileImage: reader.result
+			};
+
+			registerUser(data);
+		};
+		reader.onerror = function(error) {
+			console.log('Error: ', error);
+		}
+	}
+	else {
+		let data = {
+			username: document.querySelector("#registerUsername").value,
+			password: document.querySelector("#registerPassword").value,
+			profileImage: ""
+		};
+		registerUser(data);
+	}
+}
+
+function registerUser(data) {
+	fetch('app/users', {
+		method: 'post',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then(response => {
+			if (!response.ok) {
+				document.querySelector("#registerError").innerHTML = "Ein Fehler ist aufgetreten!";
+				throw Error(response.statusText);
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log("Login Token " + data);
+			sessionStorage.setItem('loginToken', data.token);
+			showNotesView();
+			setUserLabel();
+			getNotes();
+		})
+		.catch(error => {
+			sessionStorage.removeItem('loginToken');
+			console.error('Error:', error);
+		});
+}
+
+function checkPassword( passwd )
+{
+	var len = passwd.length;
+	var c = document.querySelector("#pwdCanvas");
+	var ctx = c.getContext("2d");
+	var grd = ctx.createLinearGradient(0, 0, len*20, 0);
+	grd.addColorStop(0, "green");
+	grd.addColorStop(1, "red");
+	ctx.fillStyle = grd;
+	ctx.fillRect(0, 0, 155, 10);
+}
