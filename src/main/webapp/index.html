@@ -25,12 +25,12 @@
 					<tr> <td>Nachname</td> <td> <input type = "text" id = "Nachname" name = "Nachname" placeholder="Mustermann"></td></tr>
 					<tr> <td>Straße </td> <td> <input type = "text" id = "Straße" name = "Straße" placeholder="Hauptstraße"> Nr. <input  type = "Number" id = "NR" name = "NR" placeholder="1"> </td></tr>
 					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ" placeholder="66482"> Ort.<input type = "text" id = "Ort" name = "Ort" placeholder="Zweibrücken"></td></tr>
-					<tr> <td>E-Mail</td> <td><input type = "email" id = "E-Mail" name = "E-Mail" placeholder="MusterMail@hs-kl.de" ></td></tr>
+					<tr> <td>E-Mail</td> <td><input type = "email" id = "EMail" name = "EMail" placeholder="MusterMail@hs-kl.de" ></td></tr>
 					<tr> <td>Profilbild</td> <td> <input type = "file" id = "Profilbild" name = "Profilbild" ></td></tr>
-					<tr> <td>Benutzer-ID</td> <td> <input type = "text" id = "Benutzer-ID" name = "Benutzer-ID" placeholder="TolleId" ></td></tr>
+					<tr> <td>Benutzer-ID</td> <td> <input type = "text" id = "BenutzerID" name = "BenutzerID" placeholder="TolleId" ></td></tr>
 					<tr> <td>Passwort</td> <td> <input  type = "password" id = "Passwort" name = "Passwort" placeholder="Geheim" ></td></tr>
 					<tr><td>Sicherheit des Passworts</td><td><canvas id="pwdCanvas" width="155" height="10"style="border: 1px solid #d3d3d3;"></canvas></td></tr>
-					<tr> <td><button id= "Registrieren">Registrieren</button></td> <td><button id = "CancelRegister">Abbrechen</button></td> </tr>
+					<tr> <td><button id= "Registrieren">Registrieren</button> <button id = "CancelRegister">Abbrechen</button> </td><td><span id="registerError"></span></td> </tr>
 					
 				</table>			
 			
@@ -44,7 +44,8 @@
 				</span> <span class=login style="white-space: nowrap"> Password: <input
 					id="passwordLogin" type="password" name="password" required />
 				</span>
-				<button class=login type="button" style="width: 100px;">Anmelden</button>
+				<button class=login id="loginButton"type="button" style="width: 100px;">Anmelden</button>
+				<span id="loginError"></span>
 				<span class=Register style="white-space: nowrap"> <input type = "button" class="Register" id ="Register" value = "Als neuen Benutzer Registrieren"></a> </span>
 				
 			</div>

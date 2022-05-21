@@ -64,10 +64,19 @@ table{
 	width:40px;
 }
 #PLZ{
-	width:55px;
+	width:52px;
 }
 #Ort{
-	width:75px;
+	width:72px;
+}
+#Profilbild{
+	width: 170px;
+}
+#registerError{
+	color:red;
+}
+#loginError{
+	color:red;
 }
 #RegisterContainer {
 	position: absolute;
@@ -75,10 +84,9 @@ table{
 	display: none;
 	top: 30%;
 	right: calc(70% - 470px);
-	width: 400px;
-	height: 350px;
+	width: 350px;
+	height: 255px;
 	border-bottom: 2px solid #fff;
     background: white;
     border: 2px solid black;
-    border-radius: 20px;
-	}
+    }

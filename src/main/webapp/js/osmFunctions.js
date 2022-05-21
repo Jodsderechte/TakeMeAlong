@@ -39,8 +39,12 @@ window.onload = function() {
 	RegistrierenKnopf.onclick = register;
 	var CancelRegisterButton = document.getElementById("CancelRegister");
 	CancelRegisterButton.onclick = hideRegisterView;
+	var loginButton = document.getElementById("loginButton");
+	loginButton.onclick = login
 	var input = document.querySelector("#Passwort");
 	input.addEventListener("keyup",function() {var passwd = input.value;checkPassword( passwd ); },false );
+	var input2 = document.querySelector("#Vorname");
+	input2.addEventListener("keyup",function() {var Vname = input.value;checkVorname( Vname ); },false );
 
 	
 	let token = sessionStorage.getItem('loginToken');
@@ -55,17 +59,26 @@ window.onload = function() {
 
 
 function showRegisterView() {
+	document.querySelector("#registerError").innerHTML = "";
 	let Register = document.getElementById('RegisterContainer');
 	let map = document.getElementById('mapid');
 	Register.style.display = "block";
 	map.style.zIndex = 7;
 	Register.style.zIndex = 8;
-    
 }
 function hideRegisterView() {
 	let Register = document.getElementById('RegisterContainer');
-	let map = document.getElementById('mapid');
 	Register.style.display = "none";
+		document.querySelector("#Vorname").value = "";
+		document.querySelector("#Nachname").value = "";
+		document.querySelector("#Straße").value = ""; 
+		document.querySelector("#NR").value = "";
+		document.querySelector("#PLZ").value = "";
+		document.querySelector("#Ort").value = "";
+		document.querySelector("#EMail").value = "";
+		document.querySelector("#BenutzerID").value = "";
+		document.querySelector("#Passwort").value = "";
+		document.getElementById("Profilbild") = "";
 }
 	
 
@@ -176,21 +189,58 @@ window.onresize = function(){
    
 }
 }; */
+function login(){
+	let data = {
+		username: document.querySelector("#userNameLogin").value,
+		password: document.querySelector("#passwordLogin").value
+	};
+
+	fetch('app/access', {
+		method: 'post',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then(response => response.json())
+		.then(data => {
+			console.log("Login Token " + data);
+			sessionStorage.setItem('loginToken', data.token);
+			showNotesView();
+			setUserLabel();
+			getNotes();
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			sessionStorage.removeItem('loginToken');
+			document.querySelector("#loginError").innerHTML = "Es ist ein Fehler aufgetreten!";
+		});
+}
+	
+
 
 function register() {
 console.log("register")
 	let file = document.getElementById("Profilbild").files[0];
+	console.log(file)
 	var reader = new FileReader();
 
 	if (file) {
 		reader.readAsDataURL(file);
 		reader.onload = function() {
 			let data = {
-				username: document.querySelector("#registerUsername").value,
-				password: document.querySelector("#registerPassword").value,
+				Vorname: document.querySelector("#Vorname").value,
+				Nachname: document.querySelector("#Nachname").value,
+				Straße: document.querySelector("#Straße").value,
+				NR:document.querySelector("#NR").value,
+				PLZ: document.querySelector("#PLZ").value,
+				Ort: document.querySelector("#Ort").value,
+				EMail: document.querySelector("#EMail").value,
+				BenutzerID: document.querySelector("#BenutzerID").value,
+				password: document.querySelector("#Passwort").value,
 				profileImage: reader.result
 			};
-
+			console.log(data)
 			registerUser(data);
 		};
 		reader.onerror = function(error) {
@@ -199,8 +249,15 @@ console.log("register")
 	}
 	else {
 		let data = {
-			username: document.querySelector("#registerUsername").value,
-			password: document.querySelector("#registerPassword").value,
+			Vorname: document.querySelector("#Vorname").value,
+			Nachname: document.querySelector("#Nachname").value,
+			Straße: document.querySelector("#Straße").value,
+			NR:document.querySelector("#NR").value,
+			PLZ: document.querySelector("#PLZ").value,
+			Ort: document.querySelector("#Ort").value,
+			EMail: document.querySelector("#EMail").value,
+			BenutzerID: document.querySelector("#BenutzerID").value,
+			password: document.querySelector("#Passwort").value,
 			profileImage: ""
 		};
 		registerUser(data);
@@ -245,4 +302,12 @@ function checkPassword( passwd )
 	grd.addColorStop(1, "red");
 	ctx.fillStyle = grd;
 	ctx.fillRect(0, 0, 155, 10);
+}
+
+function checkVorname(Vname){
+	var	re = new RegExp("ab+c");
+	var check = re.test(Vname);
+	if( check )
+	document.querySelector("#registerError").innerHTML = "Vorname ist nicht korrekt!";
+else if(document.querySelector("#registerError").innerHTML == "Vorname ist nicht korrekt!") document.querySelector("#loginError").innerHTML = "";
 }
