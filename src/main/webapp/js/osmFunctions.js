@@ -44,8 +44,13 @@ window.onload = function() {
 	var input = document.querySelector("#Passwort");
 	input.addEventListener("keyup",function() {var passwd = input.value;checkPassword( passwd ); },false );
 	var input2 = document.querySelector("#Vorname");
-	input2.addEventListener("keyup",function() {var Vname = input.value;checkVorname( Vname ); },false );
-
+	input2.addEventListener("keyup",function() {var Vname = input2.value;checkName( Vname,"Vorname" ); },false );
+	var input3 = document.querySelector("#Nachname");
+	input3.addEventListener("keyup",function() {var Vname = input3.value;checkName( Vname,"Nachname" ); },false );
+	var input4 = document.querySelector("#EMail");
+	input4.addEventListener("keyup",function() {var EMail = input4.value;checkMail(EMail); },false );
+	var input5 = document.querySelector("#PLZ");
+	input5.addEventListener("keyup",function() {var PLZ = input5.value;checkPLZ(PLZ); },false );
 	
 	let token = sessionStorage.getItem('loginToken');
 	if (token != null) {
@@ -78,7 +83,7 @@ function hideRegisterView() {
 		document.querySelector("#EMail").value = "";
 		document.querySelector("#BenutzerID").value = "";
 		document.querySelector("#Passwort").value = "";
-		document.getElementById("Profilbild") = "";
+		document.getElementById("Profilbild").value = "";
 }
 	
 
@@ -304,10 +309,53 @@ function checkPassword( passwd )
 	ctx.fillRect(0, 0, 155, 10);
 }
 
-function checkVorname(Vname){
-	var	re = new RegExp("ab+c");
-	var check = re.test(Vname);
-	if( check )
-	document.querySelector("#registerError").innerHTML = "Vorname ist nicht korrekt!";
-else if(document.querySelector("#registerError").innerHTML == "Vorname ist nicht korrekt!") document.querySelector("#loginError").innerHTML = "";
+function checkName(Name,StringToPrint){
+	var	re = new RegExp("\\b[^A-Z]");
+	var re2 = new RegExp("[^a-z]\\b")
+	var re3 = new RegExp("[0-9§,$,%,&,!,?.]")
+	var check3 = re3.test(Name)
+	var check2 = re2.test(Name)
+	var check = re.test(Name);
+	if(check|check2|check3) {
+		document.querySelector("#registerError").innerHTML = StringToPrint+" ist nicht korrekt!";
+	}
+	else if(document.querySelector("#registerError").innerHTML == StringToPrint+" ist nicht korrekt!") {
+	 	document.querySelector("#registerError").innerHTML = "";
+	}
+}
+function checkMail(Mail){
+	var	re = new RegExp("@hs-kl.de");
+	var re2 = new RegExp("@stud.hs-kl.de")
+	var check2 = re2.test(Mail)
+	var check = re.test(Mail);
+	console.log("Mailcheck")
+	if(check|check2) {
+		if(document.querySelector("#registerError").innerHTML == "E-Mail ist nicht korrekt!") {
+	 	document.querySelector("#registerError").innerHTML = "";
+	}
+	}
+	else {
+	 	document.querySelector("#registerError").innerHTML = "E-Mail ist nicht korrekt!";
+	}
+}
+function checkPLZ(PLZ){
+	if(PLZ.length==5){
+	var client = new XMLHttpRequest();
+	client.open("GET", "http://api.zippopotam.us/de/"+PLZ, true);
+	client.onreadystatechange = function() {
+	if(client.readyState == 4) {
+		if(client.responseText != "{}"&document.querySelector("#registerError").innerHTML == "PLZ ist nicht korrekt!"){
+	 		document.querySelector("#registerError").innerHTML = "";
+		}
+		else {
+			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+		}
+	};
+};
+
+client.send();
+}
+else {
+			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+		}
 }
