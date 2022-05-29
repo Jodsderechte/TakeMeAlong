@@ -297,17 +297,30 @@ function registerUser(data) {
 		});
 }
 
+function resetpwdGradient(){
+	console.log("reset");
+	var c = document.querySelector("#pwdCanvas");
+	console.log(c)
+	var ctxt = c.getContext("2d");
+	var grdt = ctxt.createLinearGradient(0, 0, 0, 0);
+	ctxt.fillStyle=grdt;
+	ctxt.fillRect(0, 0, 155, 10);
+}
+
 function checkPassword( passwd )
 {
+	resetpwdGradient();
 	var len = returnPasswordStrength(passwd);
 	var c = document.querySelector("#pwdCanvas");
 	var ctx = c.getContext("2d");
-	var grd = ctx.createLinearGradient(0, 0, len*20, 0);
+	ctx.fillstyle = 0;
+	var grd = ctx.createLinearGradient(0, 0, len*200, 0);
 	grd.addColorStop(0, "green");
 	grd.addColorStop(1, "red");
 	ctx.fillStyle = grd;
 	ctx.fillRect(0, 0, 155, 10);
 }
+
 
 function returnPasswordStrength(psswd){
 	var pswdstrength = 0
@@ -315,11 +328,6 @@ function returnPasswordStrength(psswd){
 	var	re2 = new RegExp("[a-z]");
 	var re3 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
 	var re4 = new RegExp("[_]");
-	console.log(psswd)
-	console.log(re.test(psswd))
-	console.log(re2.test(psswd))
-	console.log(re3.test(psswd))
-	console.log(re4.test(psswd))
 	if(psswd.length<5){
 		return 0
 	}
@@ -331,7 +339,8 @@ function returnPasswordStrength(psswd){
 				pswdstrength=pswdstrength+1
 			}
 		}
-	}else {pswdstrength = 1}
+	}else {pswdstrength = 1
+	}
 	return pswdstrength
 }
 function checkName(Name,StringToPrint){
