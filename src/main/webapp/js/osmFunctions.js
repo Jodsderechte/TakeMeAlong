@@ -299,7 +299,7 @@ function registerUser(data) {
 
 function checkPassword( passwd )
 {
-	var len = passwd.length;
+	var len = returnPasswordStrength(passwd);
 	var c = document.querySelector("#pwdCanvas");
 	var ctx = c.getContext("2d");
 	var grd = ctx.createLinearGradient(0, 0, len*20, 0);
@@ -309,6 +309,31 @@ function checkPassword( passwd )
 	ctx.fillRect(0, 0, 155, 10);
 }
 
+function returnPasswordStrength(psswd){
+	var pswdstrength = 0
+	var	re = new RegExp("[A-Z]");
+	var	re2 = new RegExp("[a-z]");
+	var re3 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
+	var re4 = new RegExp("[_]");
+	console.log(psswd)
+	console.log(re.test(psswd))
+	console.log(re2.test(psswd))
+	console.log(re3.test(psswd))
+	console.log(re4.test(psswd))
+	if(psswd.length<5){
+		return 0
+	}
+	else if(re.test(psswd)&re2.test(psswd)){
+		pswdstrength=2
+		if(re3.test(psswd)||re4.test(psswd)){
+			pswdstrength=pswdstrength+1
+			if(psswd.length>7){
+				pswdstrength=pswdstrength+1
+			}
+		}
+	}else {pswdstrength = 1}
+	return pswdstrength
+}
 function checkName(Name,StringToPrint){
 	var	re = new RegExp("\\b[^A-Z]");
 	var re2 = new RegExp("[^a-z]\\b")
