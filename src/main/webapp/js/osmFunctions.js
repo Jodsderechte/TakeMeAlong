@@ -46,11 +46,11 @@ window.onload = function() {
 	var VorName = document.querySelector("#Vorname");
 	VorName.addEventListener("keyup",function() {var Vname = VorName.value;checkName( Vname,"Vorname" ); },false );
 	var NachName = document.querySelector("#Nachname");
-	NachName.addEventListener("keyup",function() {var Vname = NachName.value;checkName( Vname,"Nachname" ); },false );
+	NachName.addEventListener("keyup",function() {var Nname = NachName.value;checkName( Nname,"Nachname" ); },false );
 	var EMail = document.querySelector("#EMail");
 	EMail.addEventListener("keyup",function() {var EMailvalue = EMail.value;checkMail(EMailvalue); },false );
 	var Postleihzahl = document.querySelector("#PLZ");
-	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkPLZ(PLZ); },false );
+	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
 	
 	let token = sessionStorage.getItem('loginToken');
 	if (token != null) {
@@ -378,6 +378,30 @@ function checkPLZ(PLZ){
 	client.open("GET", "http://api.zippopotam.us/de/"+PLZ, true);
 	client.onreadystatechange = function() {
 	if(client.readyState == 4) {
+		if(client.responseText != "{}"&document.querySelector("#registerError").innerHTML == "PLZ ist nicht korrekt!"){
+	 		document.querySelector("#registerError").innerHTML = "";
+		}
+		else {
+			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+		}
+	};
+};
+
+client.send();
+}
+else {
+			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+		}
+}
+
+function checkEscherPLZ(PLZ){
+	if(PLZ.length==5){
+	var client = new XMLHttpRequest();
+	client.open("GET", "http://escher.informatik.hs-kl.de:8080/PlzService/ort?plz="+PLZ, true);
+	client.setRequestHeader("Accept","application/json");
+	client.onreadystatechange = function() {
+	if(client.readyState == 4) {
+		console.log(client.responseText)
 		if(client.responseText != "{}"&document.querySelector("#registerError").innerHTML == "PLZ ist nicht korrekt!"){
 	 		document.querySelector("#registerError").innerHTML = "";
 		}
