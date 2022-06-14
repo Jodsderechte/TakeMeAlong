@@ -310,7 +310,7 @@ function resetpwdGradient(){
 function checkPassword( passwd )
 {
 	resetpwdGradient();
-	var len = returnPasswordStrength(passwd);
+	var len = getPasswordStrength(passwd);
 	var c = document.querySelector("#pwdCanvas");
 	var ctx = c.getContext("2d");
 	ctx.fillstyle = 0;
@@ -322,7 +322,7 @@ function checkPassword( passwd )
 }
 
 
-function returnPasswordStrength(psswd){
+function getPasswordStrength(psswd){
 	var pswdstrength = 0
 	var	re = new RegExp("[A-Z]");
 	var	re2 = new RegExp("[a-z]");
