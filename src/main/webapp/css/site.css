@@ -12,14 +12,20 @@
 
  ; 
 } 
- /*
+
 @media screen and (min-width: 44.001em) { 
   .mainContainer { 
     height:100vh; 
-    grid-template-rows:  75px auto; 
-    grid-template-columns: auto minmax;
-     } 
-}*/
+    grid-template-rows:  50px auto; 
+    grid-template-columns: auto minmax(350px, 350px);
+    grid-template-areas:  
+      "login      login" 
+      "map        aside" 
+    ; 
+  } 
+  
+}
+
 header {
 	padding: 15px;
 	border-bottom: 1px solid #fff;
@@ -38,7 +44,7 @@ article {
 aside {
 	border-bottom: 2px solid #fff;
     background:#F3E2A9;
-    grid-area: register;
+    grid-area: aside;
 }
 
 span + span {

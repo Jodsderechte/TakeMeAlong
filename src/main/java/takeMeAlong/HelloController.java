@@ -1,4 +1,4 @@
-package Softwaretechnik.TakeMeAlong;
+package takeMeAlong;
 
 import javax.inject.Singleton;
 import javax.ws.rs.GET;

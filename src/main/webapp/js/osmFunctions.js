@@ -5,7 +5,8 @@ var LocationList = [];
 var LastMarker;
 var MarkerList = [];
 var IsInLoginView;
-window.onload = function() {
+
+function initMap(){
 	myMap = L.map('mapid').setView([49.250723, 7.377122], 13);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -31,6 +32,8 @@ window.onload = function() {
 		popupAnchor: [1, -34],
 		shadowSize: [41, 41]
 	});
+}
+window.onload = function() {
 	var button = document.querySelector("#showBtn");
 	button.onclick = setMarker;
 	var RegisterButton = document.getElementById("Register");
@@ -40,7 +43,7 @@ window.onload = function() {
 	var CancelRegisterButton = document.getElementById("CancelRegister");
 	CancelRegisterButton.onclick = hideRegisterView;
 	var loginButton = document.getElementById("loginButton");
-	loginButton.onclick = login
+	loginButton.onclick = login;
 	var Password = document.querySelector("#Passwort");
 	Password.addEventListener("keyup",function() {var passwd = Password.value;checkPassword( passwd ); },false );
 	var VorName = document.querySelector("#Vorname");
@@ -53,6 +56,7 @@ window.onload = function() {
 	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
 	
 	let token = sessionStorage.getItem('loginToken');
+	
 	if (token != null) {
 		showLoggedinView();
 	
@@ -60,6 +64,8 @@ window.onload = function() {
 	else {
 		showLoginView();
 	}
+	initMap()
+	
 }
 
 
@@ -180,20 +186,7 @@ function showLoggedinView(){
 	mainContainer.style.gridTemplateAreas = '"login" "map"';
 	
 }
-/*
-window.onresize = function(){
-	let widthOutput = window.innerWidth;
-	if(IsInLoginView&widthOutput>700) {
-	let mainContainer = document.getElementById('mainContainer');
-	mainContainer.style.gridTemplateAreas = '"login" "map"';
-	}
-	else if(widthOutput>700){
-	let mainContainer = document.getElementById('mainContainer');
-	mainContainer.style.gridTemplateAreas = '"login" "map"';
-    ; 
-   
-}
-}; */
+
 function login(){
 	let data = {
 		username: document.querySelector("#userNameLogin").value,
@@ -314,11 +307,19 @@ function checkPassword( passwd )
 	var c = document.querySelector("#pwdCanvas");
 	var ctx = c.getContext("2d");
 	ctx.fillstyle = 0;
-	var grd = ctx.createLinearGradient(0, 0, len*200, 0);
+	console.log(len)
+	var grd = ctx.createLinearGradient(0, 0, len*50+1, 0);
 	grd.addColorStop(0, "green");
 	grd.addColorStop(1, "red");
 	ctx.fillStyle = grd;
-	ctx.fillRect(0, 0, 155, 10);
+	ctx.fillRect(0, 0, 100, 10);
+	switch(len){
+		case 0: document.querySelector("#PasswortError").innerHTML = " Nicht Sicher"; break;
+		case 1: document.querySelector("#PasswortError").innerHTML = " Akzeptabel";break;
+		case 2: document.querySelector("#PasswortError").innerHTML = " Mittel Sicher";break;
+		case 3: document.querySelector("#PasswortError").innerHTML = " Sicher";break;
+		case 4: document.querySelector("#PasswortError").innerHTML = " Sehr Sicher";break;
+	}
 }
 
 
@@ -328,12 +329,13 @@ function getPasswordStrength(psswd){
 	var	re2 = new RegExp("[a-z]");
 	var re3 = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/
 	var re4 = new RegExp("[_]");
+	var re5 = new RegExp("[0-9]");
 	if(psswd.length<5){
 		return 0
 	}
 	else if(re.test(psswd)&re2.test(psswd)){
 		pswdstrength=2
-		if(re3.test(psswd)||re4.test(psswd)){
+		if(re5.test(psswd)&(re3.test(psswd)||re4.test(psswd))){
 			pswdstrength=pswdstrength+1
 			if(psswd.length>7){
 				pswdstrength=pswdstrength+1
