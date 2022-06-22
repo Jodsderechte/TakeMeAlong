@@ -1,4 +1,4 @@
-package takeMeAlong.geocode;
+package app.geocode;
 
 import javax.json.bind.annotation.JsonbProperty;
 

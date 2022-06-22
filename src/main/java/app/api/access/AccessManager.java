@@ -1,4 +1,4 @@
-package takeMeAlong.api.access;
+package app.api.access;
 
 import java.util.Map;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import takeMeAlong.dao.UserDAO;
+import app.dao.UserDAO;
 
 @Singleton
 public class AccessManager 

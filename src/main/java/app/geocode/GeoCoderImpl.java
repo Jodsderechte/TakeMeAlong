@@ -1,8 +1,8 @@
-package takeMeAlong.geocode;
+package app.geocode;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-import takeMeAlong.model.Position;
+import app.model.Position;
 
 import java.util.Optional;
 

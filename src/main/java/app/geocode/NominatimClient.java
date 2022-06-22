@@ -1,4 +1,4 @@
-package takeMeAlong.geocode;
+package app.geocode;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 

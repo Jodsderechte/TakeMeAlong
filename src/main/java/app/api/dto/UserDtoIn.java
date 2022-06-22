@@ -1,12 +1,12 @@
-package takeMeAlong.api.dto;
+package app.api.dto;
 
 import java.io.Serializable;
 
-import takeMeAlong.model.User;
 
 @SuppressWarnings("serial")
-public class UserDtoOut implements Serializable {
+public class UserDtoIn implements Serializable {
 	private String username;
+	private String password;
 	private String firstname;
 	private String lastname;
 	private String email;
@@ -15,24 +15,22 @@ public class UserDtoOut implements Serializable {
 	private String zip;
 	private String city;
 	
-	public UserDtoOut()
+	public UserDtoIn()
 	{
 	
 	}
 	
-	public UserDtoOut(User user)
-	{
-		this.username = user.getUsername();
-		this.firstname = user.getFirstname();
-		this.lastname = user.getLastname();
-		this.email = user.getEmail();
-		this.street = user.getStreet();
-		this.streetNumber = user.getStreetNumber();
-		this.zip = user.getZip();
-		this.city = user.getCity();
-		
-	}
 	
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 	public String getUsername() {
 		return username;
 	}

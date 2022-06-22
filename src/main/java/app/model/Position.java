@@ -1,4 +1,4 @@
-package takeMeAlong.model;
+package app.model;
 
 import java.io.Serializable;
 

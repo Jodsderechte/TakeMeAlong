@@ -1,4 +1,4 @@
-package takeMeAlong.dao;
+package app.dao;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,14 +8,15 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import takeMeAlong.geocode.GeoCoder;
-import takeMeAlong.model.Position;
-import takeMeAlong.model.User;
-import takeMeAlong.model.converter.PositionConverter;
-import takeMeAlong.util.PasswordTools;
+import app.geocode.GeoCoder;
+import app.model.Position;
+import app.model.User;
+import app.model.converter.PositionConverter;
+import app.util.PasswordTools;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 @Singleton
 public class UserDAO {

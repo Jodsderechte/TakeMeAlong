@@ -1,44 +1,38 @@
-package takeMeAlong;
+package app.api;
 
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import takeMeAlong.api.access.AccessManager;
-import takeMeAlong.api.dto.LoginDto;
-import takeMeAlong.api.dto.Token;
-import takeMeAlong.api.dto.UserDtoIn;
-import takeMeAlong.dao.UserDAO;
+import app.api.access.AccessManager;
+import app.api.dto.LoginDto;
+import app.api.dto.Token;
+import app.api.dto.UserDtoIn;
+import app.dao.UserDAO;
+import javax.transaction.Transactional;
 
-/**
- *
- */
-@ApplicationPath("/access")
+@Path("/access")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
-public class TakeMeAlongRestApplication extends Application {
-
-	@Inject
-	private UserDAO userDAO;
+public class AccessController {
 
 	@Inject
 	private AccessManager accessManager;
 
-	@GET
+	@POST
 	public Token login(LoginDto loginDto) {
 		try {
+			System.out.println( loginDto );
+			
 			UUID uuid = accessManager.register(loginDto.getUsername(), loginDto.getPassword());
 
 			System.out.println("Login : " + loginDto.getUsername());
@@ -60,16 +54,6 @@ public class TakeMeAlongRestApplication extends Application {
 		return accessManager.deregister(username) ? Response.ok().build() : Response.status(404).build();
 	}
 
-	@POST
-	@Transactional
-	public Token register(UserDtoIn user) {
 
-		userDAO.createUser(user.getUsername(), user.getPassword(), user.getFirstname(), 
-				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity());
-
-		UUID uuid = accessManager.register(user.getUsername(), user.getPassword());
-		
-		return new Token(uuid);
-	}
 
 }

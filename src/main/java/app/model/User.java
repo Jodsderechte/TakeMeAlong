@@ -1,10 +1,10 @@
-package takeMeAlong.model;
+package app.model;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-import takeMeAlong.model.converter.PositionConverter;
+import app.model.converter.PositionConverter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -22,9 +22,11 @@ import javax.persistence.TemporalType;
 @NamedQueries({ 
 	@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
 	@NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.username = :username") })
+
 @SuppressWarnings("serial")
 public class User implements Serializable {
-    @Id
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Integer userId;

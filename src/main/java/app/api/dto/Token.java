@@ -1,4 +1,4 @@
-package takeMeAlong.api.dto;
+package app.api.dto;
 
 import java.io.Serializable;
 import java.util.UUID;

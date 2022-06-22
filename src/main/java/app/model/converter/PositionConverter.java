@@ -1,12 +1,11 @@
-package takeMeAlong.model.converter;
+package app.model.converter;
 
 
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import takeMeAlong.model.Position;
-
+import app.model.Position;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 

@@ -1,4 +1,4 @@
-package takeMeAlong.api;
+package app.api;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,16 +9,19 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import takeMeAlong.api.access.AccessManager;
-import takeMeAlong.api.dto.UserDtoOut;
-import takeMeAlong.dao.UserDAO;
-import takeMeAlong.model.User;
+import app.api.access.AccessManager;
+import app.api.dto.Token;
+import app.api.dto.UserDtoIn;
+import app.api.dto.UserDtoOut;
+import app.dao.UserDAO;
+import app.model.User;
 import javax.transaction.Transactional;
 
 @Path("/user")
@@ -89,5 +92,17 @@ public class UserController
 		List<User> users = userDAO.findUserNearBy(user.getPosition(), distance);
 		
 		return users.stream().map( UserDtoOut::new ).collect(Collectors.toList() );
+	}
+    
+	@POST
+	@Transactional
+	public Token register(UserDtoIn user) {
+
+		userDAO.createUser(user.getUsername(), user.getPassword(), user.getFirstname(), 
+				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity());
+
+		UUID uuid = accessManager.register(user.getUsername(), user.getPassword());
+		
+		return new Token(uuid);
 	}
 }

@@ -13,11 +13,12 @@
  ; 
 } 
 
-@media screen and (min-width: 44.001em) { 
+@media screen and (min-width: 44em) { 
   .mainContainer { 
-    height:100vh; 
-    grid-template-rows:  50px auto; 
-    grid-template-columns: auto minmax(350px, 350px);
+    height: 100%;
+    display: grid; 
+    grid-template-rows:  min-content 1fr; 
+    grid-template-columns: 1fr min-content;
     grid-template-areas:  
       "login      login" 
       "map        aside" 

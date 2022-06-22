@@ -1,4 +1,4 @@
-package takeMeAlong.api.dto;
+package app.api.dto;
 
 import java.io.Serializable;
 
@@ -21,6 +21,12 @@ public class LoginDto implements Serializable
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	@Override
+	public String toString() {
+		return "LoginDto [username=" + username + ", password=" + password + "]";
+	}
+	
 	
 	
 }
