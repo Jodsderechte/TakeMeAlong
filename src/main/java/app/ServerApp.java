@@ -6,6 +6,6 @@ import javax.ws.rs.core.Application;
 /**
  *
  */
-@ApplicationPath("/demo")
+@ApplicationPath("/app")
 public class ServerApp extends Application {
 }

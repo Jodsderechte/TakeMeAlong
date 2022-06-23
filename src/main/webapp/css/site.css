@@ -1,11 +1,22 @@
 @charset "UTF-8";
 
+html {
+    height: 100%;
+    width: 100%;
+}
+
+
+body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
 
 .mainContainer { 
-  height:100vh; 
+  height: 100%; 
   display: grid; 
-  grid-template-rows: 75px auto; 
-  grid-template-columns:  auto minmax; 
+  grid-template-rows: min-content 1fr; 
+  grid-template-columns:  1fr min-content; 
   grid-template-areas:  
     "login" 
     "map"  
@@ -97,3 +108,7 @@ table{
     background: white;
     border: 2px solid black;
     }
+    
+.hidden {
+    display: none;
+}    

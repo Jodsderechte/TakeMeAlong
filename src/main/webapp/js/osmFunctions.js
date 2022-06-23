@@ -169,22 +169,22 @@ function changeMarker(newMarker){
 		LastMarker = newMarker            
 }
 
+function setVisibility(elementId, visible) {
+    const element = document.getElementById(elementId);
+    if(visible === true) {
+        element.classList.remove("hidden");
+    } else {
+        element.classList.add("hidden")
+    }
+}
+
 function showLoginView(){
-	let aside = document.getElementById('aside')
 	IsInLoginView = true
-	aside.style.display = "none";
-	let mainContainer = document.getElementById('mainContainer');
-	mainContainer.style.gridTemplateAreas = '"login" "map"';
-	
+	setVisibility("aside", false);
 }
 
 function showLoggedinView(){
-	let aside = document.getElementById('aside')
-	aside.style.display = "block";
-	IsInLoginView = false;
-	let mainContainer = document.getElementById('mainContainer');
-	mainContainer.style.gridTemplateAreas = '"login" "map"';
-	
+	setVisibility("aside", true);
 }
 
 function login(){
@@ -204,9 +204,7 @@ function login(){
 		.then(data => {
 			console.log("Login Token " + data);
 			sessionStorage.setItem('loginToken', data.token);
-			showNotesView();
-			setUserLabel();
-			getNotes();
+			showLoggedinView()
 		})
 		.catch((error) => {
 			console.error('Error:', error);
@@ -280,9 +278,7 @@ function registerUser(data) {
 		.then(data => {
 			console.log("Login Token " + data);
 			sessionStorage.setItem('loginToken', data.token);
-			showNotesView();
-			setUserLabel();
-			getNotes();
+			showLoggedinView()
 		})
 		.catch(error => {
 			sessionStorage.removeItem('loginToken');
