@@ -44,6 +44,8 @@ window.onload = function() {
 	CancelRegisterButton.onclick = hideRegisterView;
 	var loginButton = document.getElementById("loginButton");
 	loginButton.onclick = login;
+	var logoutButton = document.getElementById("logoutButton");
+	logoutButton.onclick = logout;
 	var Password = document.querySelector("#Passwort");
 	Password.addEventListener("keyup",function() {var passwd = Password.value;checkPassword( passwd ); },false );
 	var VorName = document.querySelector("#Vorname");
@@ -58,13 +60,13 @@ window.onload = function() {
 	let token = sessionStorage.getItem('loginToken');
 	
 	if (token != null) {
+		console.log(token)
 		showLoggedinView();
 	
 	}
 	else {
 		showLoginView();
 	}
-	initMap()
 	
 }
 
@@ -181,10 +183,15 @@ function setVisibility(elementId, visible) {
 function showLoginView(){
 	IsInLoginView = true
 	setVisibility("aside", false);
+	setVisibility("login", true);
+	setVisibility("loggedIn", false);
+	initMap();
 }
 
 function showLoggedinView(){
 	setVisibility("aside", true);
+	setVisibility("login", false);
+	setVisibility("loggedIn", true);
 }
 
 function login(){
@@ -192,7 +199,6 @@ function login(){
 		username: document.querySelector("#userNameLogin").value,
 		password: document.querySelector("#passwordLogin").value
 	};
-
 	fetch('app/access', {
 		method: 'post',
 		headers: {
@@ -213,7 +219,28 @@ function login(){
 		});
 }
 	
-
+function logout(){
+	let data = {
+		token: sessionStorage.getItem('loginToken')
+	};
+	console.log(JSON.stringify(data))
+	fetch('app/access', {
+		method: 'delete',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then(response => response.json())
+		.then(data => {
+			console.log("Logout Token " + data);
+			showLoginView();
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			showLoginView();
+		});
+}
 
 function register() {
 console.log("register")

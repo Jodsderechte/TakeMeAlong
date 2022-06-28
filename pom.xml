@@ -49,7 +49,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>microprofile_db_access</finalName>
+		<finalName>takeMeAlong</finalName>
 	</build>
 	<profiles>
 		<profile>

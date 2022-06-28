@@ -19,6 +19,8 @@
     <!-- This is the keystore that will be used by SSL and by JWT. -->
     <keyStore id="defaultKeyStore" location="${server.config.dir}/public.jks" type="JKS" password="atbash" />
 
+		<ssl id="defaultSSLConfig" keyStoreRef="defaultKeyStore" trustDefaultCerts="true"/>
+
      <library id="jdbcLib">
         <fileset dir="${server.config.dir}" includes="*.jar"/>
     </library>
