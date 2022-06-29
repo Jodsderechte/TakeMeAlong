@@ -97,9 +97,9 @@ public class UserController
 	@POST
 	@Transactional
 	public Token register(UserDtoIn user) {
-
+		System.out.println(user);
 		userDAO.createUser(user.getUsername(), user.getPassword(), user.getFirstname(), 
-				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity());
+				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity(),user.getprofileImage());
 
 		UUID uuid = accessManager.register(user.getUsername(), user.getPassword());
 		

@@ -14,12 +14,20 @@ public class UserDtoIn implements Serializable {
 	private String streetNumber;
 	private String zip;
 	private String city;
+	private String profileImage;
 	
 	public UserDtoIn()
 	{
 	
 	}
-	
+	public String getprofileImage() {
+		return profileImage;
+	}
+
+
+	public void setprofileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
 	
 	public String getPassword() {
 		return password;
@@ -79,6 +87,12 @@ public class UserDtoIn implements Serializable {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+	@Override
+	public String toString() {
+		return "UserDtoIn [username=" + username + ", password=" + password + ", firstname=" + firstname + ", lastname="
+				+ lastname + ", email=" + email + ", street=" + street + ", streetNumber=" + streetNumber + ", zip="
+				+ zip + ", city=" + city + ", profileImage=" + profileImage + "]";
 	}
 	
 	

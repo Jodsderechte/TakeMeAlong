@@ -185,7 +185,9 @@ function showLoginView(){
 	setVisibility("aside", false);
 	setVisibility("login", true);
 	setVisibility("loggedIn", false);
-	initMap();
+	if(myMap== null){
+		initMap();
+	}
 }
 
 function showLoggedinView(){
@@ -220,20 +222,16 @@ function login(){
 }
 	
 function logout(){
-	let data = {
-		token: sessionStorage.getItem('loginToken')
-	};
-	console.log(JSON.stringify(data))
-	fetch('app/access', {
+	let token = sessionStorage.getItem('loginToken')
+	fetch('app/access?token='+token, {
 		method: 'delete',
 		headers: {
 			'Content-type': 'application/json'
 		},
-		body: JSON.stringify(data)
 	})
-		.then(response => response.json())
-		.then(data => {
-			console.log("Logout Token " + data);
+		.then(response => {
+			console.log("Logout Token " + response);
+			sessionStorage.removeItem('loginToken');
 			showLoginView();
 		})
 		.catch((error) => {
@@ -252,14 +250,14 @@ console.log("register")
 		reader.readAsDataURL(file);
 		reader.onload = function() {
 			let data = {
-				Vorname: document.querySelector("#Vorname").value,
-				Nachname: document.querySelector("#Nachname").value,
-				Straße: document.querySelector("#Straße").value,
-				NR:document.querySelector("#NR").value,
-				PLZ: document.querySelector("#PLZ").value,
-				Ort: document.querySelector("#Ort").value,
-				EMail: document.querySelector("#EMail").value,
-				BenutzerID: document.querySelector("#BenutzerID").value,
+				firstname: document.querySelector("#Vorname").value,
+				lastname: document.querySelector("#Nachname").value,
+				street: document.querySelector("#Straße").value,
+				streetNumber:document.querySelector("#NR").value,
+				zip: document.querySelector("#PLZ").value,
+				city: document.querySelector("#Ort").value,
+				email: document.querySelector("#EMail").value,
+				username: document.querySelector("#BenutzerID").value,
 				password: document.querySelector("#Passwort").value,
 				profileImage: reader.result
 			};
@@ -272,15 +270,17 @@ console.log("register")
 	}
 	else {
 		let data = {
-			Vorname: document.querySelector("#Vorname").value,
-			Nachname: document.querySelector("#Nachname").value,
-			Straße: document.querySelector("#Straße").value,
-			NR:document.querySelector("#NR").value,
-			PLZ: document.querySelector("#PLZ").value,
-			Ort: document.querySelector("#Ort").value,
-			EMail: document.querySelector("#EMail").value,
-			BenutzerID: document.querySelector("#BenutzerID").value,
+			
+			
+			username: document.querySelector("#BenutzerID").value,
 			password: document.querySelector("#Passwort").value,
+			firstname: document.querySelector("#Vorname").value,
+			lastname: document.querySelector("#Nachname").value,
+			email: document.querySelector("#EMail").value,
+			street: document.querySelector("#Straße").value,
+			streetNumber: document.querySelector("#NR").value,
+			zip: document.querySelector("#PLZ").value,
+			city: document.querySelector("#Ort").value,
 			profileImage: ""
 		};
 		registerUser(data);
@@ -288,7 +288,8 @@ console.log("register")
 }
 
 function registerUser(data) {
-	fetch('app/users', {
+	console.log(JSON.stringify(data))
+	fetch('app/user', {
 		method: 'post',
 		headers: {
 			'Content-type': 'application/json'
@@ -308,7 +309,9 @@ function registerUser(data) {
 			showLoggedinView()
 		})
 		.catch(error => {
-			sessionStorage.removeItem('loginToken');
+			if(sessionStorage.getItem('loginToken')!=null){
+			sessionStorage.removeItem('loginToken');	
+			}
 			console.error('Error:', error);
 		});
 }

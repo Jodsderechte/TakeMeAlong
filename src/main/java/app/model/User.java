@@ -1,5 +1,6 @@
 package app.model;
 
+import java.awt.Image;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -54,6 +55,9 @@ public class User implements Serializable {
 
     @Column(length = 20, nullable = false)
     private String lastname;
+    
+    @Column(length = 500, nullable = false)
+    private String profileImage; 
 
     @Convert(converter = PositionConverter.class)
     @Column(nullable = false, columnDefinition = "GEOMETRY")
@@ -88,6 +92,14 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public String getprofileImage() {
+        return profileImage;
+    }
+
+    public void setprofileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public String getEmail() {

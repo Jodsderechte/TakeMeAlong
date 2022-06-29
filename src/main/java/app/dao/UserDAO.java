@@ -1,5 +1,6 @@
 package app.dao;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +64,7 @@ public class UserDAO {
 	}
 
 	public User createUser(String username, String password, String firstname, String lastname, String email,
-			String street, String streetNumber, String zip, String city) {
+			String street, String streetNumber, String zip, String city, String profileImage) {
 
 		try {
 			User user = new User();
@@ -75,6 +76,7 @@ public class UserDAO {
 			user.setStreetNumber(streetNumber);
 			user.setZip(zip);
 			user.setCity(city);
+			user.setprofileImage(profileImage);
 						
 			Optional<Position> position = geoCoder.geocode(street, streetNumber, zip, city, "Germany");
 			
