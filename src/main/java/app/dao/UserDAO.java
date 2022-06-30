@@ -1,6 +1,5 @@
 package app.dao;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,9 +7,11 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.json.Json;
 
 import app.geocode.GeoCoder;
 import app.model.Position;
+import app.model.ProfileImage;
 import app.model.User;
 import app.model.converter.PositionConverter;
 import app.util.PasswordTools;
@@ -18,6 +19,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+
+import com.google.gson.Gson;
 
 @Singleton
 public class UserDAO {
@@ -68,6 +71,13 @@ public class UserDAO {
 
 		try {
 			User user = new User();
+			if(profileImage.length()>1){
+				
+			ProfileImage image = new ProfileImage();
+			image.setImage_data(profileImage);
+			image.setContent_type(profileImage.substring(5,14));
+			user.setImageId(image.getImageId());
+			}
 			user.setUsername(username);
 			user.setFirstname(firstname);
 			user.setLastname(lastname);
@@ -76,8 +86,8 @@ public class UserDAO {
 			user.setStreetNumber(streetNumber);
 			user.setZip(zip);
 			user.setCity(city);
-			user.setprofileImage(profileImage);
-						
+			
+			System.out.println(user);			
 			Optional<Position> position = geoCoder.geocode(street, streetNumber, zip, city, "Germany");
 			
 			if( position.isEmpty() )

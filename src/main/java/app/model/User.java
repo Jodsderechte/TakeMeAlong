@@ -1,7 +1,7 @@
 package app.model;
 
-import java.awt.Image;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -31,7 +31,10 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Integer userId;
-
+	
+	@Column(name = "image_id", nullable = false)
+    private Integer imageId;
+	
     @Column(length = 20, nullable = false, unique = true)
     private String username;
 
@@ -55,9 +58,6 @@ public class User implements Serializable {
 
     @Column(length = 20, nullable = false)
     private String lastname;
-    
-    @Column(length = 500, nullable = false)
-    private String profileImage; 
 
     @Convert(converter = PositionConverter.class)
     @Column(nullable = false, columnDefinition = "GEOMETRY")
@@ -94,15 +94,17 @@ public class User implements Serializable {
         this.username = username;
     }
     
-    public String getprofileImage() {
-        return profileImage;
-    }
 
-    public void setprofileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+    public Integer getImageId() {
+		return imageId;
+	}
 
-    public String getEmail() {
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
+
+	public String getEmail() {
         return email;
     }
 
@@ -198,10 +200,14 @@ public class User implements Serializable {
         this.modifyDate = modifyDate;
     }
 
+	
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", email=" + email + ", firstname=" + firstname
-				+ ", lastname=" + lastname + "]";
+		return "User [userId=" + userId + ", imageId=" + imageId + ", username=" + username + ", email=" + email
+				+ ", street=" + street + ", street_number=" + street_number + ", zip=" + zip + ", city=" + city
+				+ ", firstname=" + firstname + ", lastname=" + lastname + ", position=" + position + ", passwordHash="
+				+ Arrays.toString(passwordHash) + ", passwordSalt=" + Arrays.toString(passwordSalt) + ", createDate="
+				+ createDate + ", modifyDate=" + modifyDate + "]";
 	}
 
 	@Override

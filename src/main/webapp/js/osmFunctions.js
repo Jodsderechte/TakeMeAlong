@@ -249,6 +249,7 @@ console.log("register")
 	if (file) {
 		reader.readAsDataURL(file);
 		reader.onload = function() {
+			console.log(JSON.stringify(reader.result))
 			let data = {
 				firstname: document.querySelector("#Vorname").value,
 				lastname: document.querySelector("#Nachname").value,
@@ -317,9 +318,7 @@ function registerUser(data) {
 }
 
 function resetpwdGradient(){
-	console.log("reset");
 	var c = document.querySelector("#pwdCanvas");
-	console.log(c)
 	var ctxt = c.getContext("2d");
 	var grdt = ctxt.createLinearGradient(0, 0, 0, 0);
 	ctxt.fillStyle=grdt;
@@ -333,7 +332,6 @@ function checkPassword( passwd )
 	var c = document.querySelector("#pwdCanvas");
 	var ctx = c.getContext("2d");
 	ctx.fillstyle = 0;
-	console.log(len)
 	var grd = ctx.createLinearGradient(0, 0, len*50+1, 0);
 	grd.addColorStop(0, "green");
 	grd.addColorStop(1, "red");
