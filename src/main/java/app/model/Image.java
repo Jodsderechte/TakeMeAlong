@@ -20,11 +20,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "image")
 @NamedQueries({ 
-	@NamedQuery(name = "Image.findAll", query = "SELECT i FROM image i"),
+	@NamedQuery(name = "Image.findAll", query = "SELECT i FROM Image i"),
 	@NamedQuery(name = "Image.findByImageId", query = "SELECT i FROM image i WHERE i.image_id = :image_id") })
 
 @SuppressWarnings("serial")
-public class ProfileImage implements Serializable {
+public class Image implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +59,23 @@ public class ProfileImage implements Serializable {
 
 	public void setContent_type(String content_type) {
 		this.content_type = content_type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(content_type, imageId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Image other = (Image) obj;
+		return Objects.equals(content_type, other.content_type) && Objects.equals(imageId, other.imageId);
 	}
 
 }

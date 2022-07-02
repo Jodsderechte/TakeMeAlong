@@ -37,9 +37,32 @@
 				</table>			
 			
 		</div>
+		
+		<div id =StundenplanContainer class ="StundenplanContainer">
+			
+			
+			<h3>Meine Adresse</h3>
+			 <span id="MyAdress"></span>	
+		  <h2>Mein Stundenplan</h2>
+		  <button id= "Speichern">Speichern</button>
+		  <table>
+		 			<tr> <th>Wochentag</th> <th>Beginn</th> <th>Ende</th></tr>
+					<tr> <td>Montag</td> <td > <input type = "time" id = "BeginnMontag" name = "BeginnMontag"> </td> <td> <input type = "time" id = "EndeMontag" name = "EndeMontag"></td></tr>
+					<tr> <td>Dienstag</td> <td> <input type = "time" id = "BeginnDienstag" name = "BeginnDienstag"></td> <td> <input type = "time" id = "EndeDienstag" name = "EndeDienstag"></td></tr>
+					<tr> <td>Mittwoch</td> <td> <input type = "time" id = "BeginnMittwoch" name = "BeginnMittwoch"></td> <td> <input type = "time" id = "EndeMittwoch" name = "EndeMittwoch"></td></tr>
+					<tr> <td>Donnerstag</td> <td> <input type = "time" id = "BeginnDonnerstag" name = "BeginnDonnerstag"></td> <td> <input type = "time" id = "EndeDonnerstag" name = "EndeDonnerstag"></td></tr>  
+					<tr> <td>Freitag</td> <td> <input type = "time" id = "BeginnFreitag" name = "BeginnFreitag"></td> <td> <input type = "time" id = "EndeFreitag" name = "EndeFreitag"></td></tr> 
+					
+				</table>			
+			
+		</div>
+		
 	<div id= "mainContainer" class="mainContainer">
 		<header>
 			<div id=login>
+			<button class=Hackerbutton id="Hackerbutton"type="button" style="width: 100px;">Hackerbutton</button>
+	
+				
 			<span class=WebsiteName-text style="white-space:nowrap;font-weight:bold;font-size: xx-large;"> Carpooling</span>
 				<span class=login style="white-space: nowrap"> Benutzer: <input
 					id="userNameLogin" type="text" name="userName" required />
@@ -61,28 +84,30 @@
 			<div id="mapid" style="height: 100%;"></div>
 		</article>
 		<aside id=aside>
-          <h3>Eingabe der Adresse</h3>
-          <table>
-            <tr>
-			  <td>Straße</td>
-			  <td><input id="street" type="text" name="street" size="25" /> 
-			      <span style="float: right;"> Nr: <input id="streetNr" type="text" name="streetNr" size="4" /> </span>
-			  </td>
-		    </tr>
-		    <tr>
-			  <td>PLZ</td>
-			  <td><input id="zip" type="text" name="zip" size="5" /> <span style="float: right;"> Ort <input id="city" type="text" name="city"
-					size="25" /> </span>
-			 </td>
-		   </tr>
-		   <tr>
-			   <td> &nbsp;</td>
-			   <td align="left">
-				<button id="showBtn" type="button" style="width: 100px; height: 30px;">Anzeigen</button>
-			   </td>
-		    </tr>
-          </table>
-          <hr/>
+		<div id="in">
+          <h3>Eine Mitfahrgelegenheit suchen</h3>
+         		<input type="radio" id="hinfahrt" name="Fahrart" value="Hinfahrt">
+  				<label for="Hinfahrt">zur Hinfahrt</label><br>
+  				<input type="radio" id="Rückfahrt" name="Fahrart" value="Rückfahrt">
+  				<label for="Rückfahrt">zur Rückfahrt</label><br>
+  				<input type="radio" id="Beides" name="Fahrart" value="Beides">
+  				<label for="Beides">Hin-/Rückfahrt</label> <br>
+         		<span style="white-space: nowrap"> Umkreis in KM: <input
+					id="Umkreis" type="Number" name="Umkreis" required /> <br>
+				<label for="Wochentag">Wochentag:</label>
+					<select name="Wochentag" id="Wochentag">
+					  <option value="Montag">Montag</option>
+					  <option value="Dienstag">Dienstag</option>
+					  <option value="Mittwoch">Mittwoch</option>
+					  <option value="Donnerstag">Donnerstag</option>
+					  <option value="Freitag">Freitag</option>
+					</select> <br>
+				<span style="white-space: nowrap"> Späteste Ankunft Hinfahrt: <input
+					id="Zeit" type="time" name="Zeit" required />
+				<br>
+				<button class=Suchen id="Suchen"type="button" style="width: 100px;">Suchen</button>
+	
+    	</div>
           <div id="out">
           
           

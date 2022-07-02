@@ -11,7 +11,7 @@ import javax.json.Json;
 
 import app.geocode.GeoCoder;
 import app.model.Position;
-import app.model.ProfileImage;
+import app.model.Image;
 import app.model.User;
 import app.model.converter.PositionConverter;
 import app.util.PasswordTools;
@@ -73,8 +73,8 @@ public class UserDAO {
 			User user = new User();
 			if(profileImage.length()>1){
 				
-			ProfileImage image = new ProfileImage();
-			image.setImage_data(profileImage);
+			Image image = new Image();
+			image.setImage_data(profileImage); // .substring(15, profileImage.length())
 			image.setContent_type(profileImage.substring(5,14));
 			user.setImageId(image.getImageId());
 			}

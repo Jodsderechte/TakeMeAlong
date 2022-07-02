@@ -34,8 +34,7 @@ function initMap(){
 	});
 }
 window.onload = function() {
-	var button = document.querySelector("#showBtn");
-	button.onclick = setMarker;
+	
 	var RegisterButton = document.getElementById("Register");
 	RegisterButton.onclick = showRegisterView;
 	var RegistrierenKnopf = document.getElementById("Registrieren");
@@ -56,8 +55,19 @@ window.onload = function() {
 	EMail.addEventListener("keyup",function() {var EMailvalue = EMail.value;checkMail(EMailvalue); },false );
 	var Postleihzahl = document.querySelector("#PLZ");
 	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
+	var Suchenbutton= document.getElementById("Suchen");
+	Suchenbutton.onclick = sucheMitfahrgelegenheit;
+	
+	
+	
+	
+	
+	var Hackerbutton= document.getElementById("Hackerbutton");
+	Hackerbutton.onclick = showLoggedinView;
 	
 	let token = sessionStorage.getItem('loginToken');
+	
+	
 	
 	if (token != null) {
 		console.log(token)
@@ -181,19 +191,25 @@ function setVisibility(elementId, visible) {
 }
 
 function showLoginView(){
+	console.log("login view")
 	IsInLoginView = true
 	setVisibility("aside", false);
 	setVisibility("login", true);
 	setVisibility("loggedIn", false);
+	setVisibility("StundenplanContainer", false);
+	setVisibility("MainContainer", true);
 	if(myMap== null){
 		initMap();
 	}
 }
 
 function showLoggedinView(){
+	console.log("logged in view")
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
+	setVisibility("StundenplanContainer", false);
+	setVisibility("MainContainer", true);
 }
 
 function login(){
@@ -442,4 +458,55 @@ client.send();
 else {
 			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
 		}
+}
+
+
+function sucheMitfahrgelegenheit(){
+	let Fahrart = document.querySelector('input[name="Fahrart"]:checked').value;
+	let Wochentag = document.getElementById("Wochentag").value;	
+	let Zeit = document.getElementById("Zeit").value;
+	console.log(Fahrart);
+		let data = {
+				distance:document.getElementById("Umkreis").value,
+				token: sessionStorage.getItem('loginToken')
+			};
+	fetch('app/user', {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then(response => {
+			if (!response.ok) {
+				document.querySelector("#registerError").innerHTML = "Ein Fehler ist aufgetreten!";
+				throw Error(response.statusText);
+			}
+			return response.json();
+		})
+		.then(data => {
+			checkWeekTime(data);
+		})
+		.catch(error => {
+			console.error('Error:', error);
+		});
+}
+
+function checkWeekTime(data){
+	console.log(data);
+	showMitfahrgelegenheiten(data);
+}
+
+function showMitfahrgelegenheiten(data){
+	document.getElementById("out").value=data
+}
+
+function showStundenplan(){
+	let Adresse = "PLACEHOLDER"
+	document.getElementById("MyAdress").value=Adresse
+	setVisibility("aside", true);
+	setVisibility("login", false);
+	setVisibility("loggedIn", true);
+	setVisibility("StundenplanContainer", true);
+	setVisibility("MainContainer", false);
 }
