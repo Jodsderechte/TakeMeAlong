@@ -57,13 +57,16 @@ window.onload = function() {
 	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
 	var Suchenbutton= document.getElementById("Suchen");
 	Suchenbutton.onclick = sucheMitfahrgelegenheit;
-	
-	
+	var StundenplanButton= document.getElementById("StundenplanButton");
+	StundenplanButton.onclick = showStundenplan;
+	var KartenButton= document.getElementById("KartenButton");
+	KartenButton.onclick = showLoggedinView;
 	
 	
 	
 	var Hackerbutton= document.getElementById("Hackerbutton");
 	Hackerbutton.onclick = showLoggedinView;
+	
 	
 	let token = sessionStorage.getItem('loginToken');
 	
@@ -197,7 +200,7 @@ function showLoginView(){
 	setVisibility("login", true);
 	setVisibility("loggedIn", false);
 	setVisibility("StundenplanContainer", false);
-	setVisibility("MainContainer", true);
+	setVisibility("mapid", true);
 	if(myMap== null){
 		initMap();
 	}
@@ -209,7 +212,7 @@ function showLoggedinView(){
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
 	setVisibility("StundenplanContainer", false);
-	setVisibility("MainContainer", true);
+	setVisibility("mapid", true);
 }
 
 function login(){
@@ -462,6 +465,7 @@ else {
 
 
 function sucheMitfahrgelegenheit(){
+	showLoggedinView;
 	let Fahrart = document.querySelector('input[name="Fahrart"]:checked').value;
 	let Wochentag = document.getElementById("Wochentag").value;	
 	let Zeit = document.getElementById("Zeit").value;
@@ -508,5 +512,5 @@ function showStundenplan(){
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
 	setVisibility("StundenplanContainer", true);
-	setVisibility("MainContainer", false);
+	setVisibility("mapid", false);
 }

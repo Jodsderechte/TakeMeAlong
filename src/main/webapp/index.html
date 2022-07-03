@@ -38,24 +38,7 @@
 			
 		</div>
 		
-		<div id =StundenplanContainer class ="StundenplanContainer">
-			
-			
-			<h3>Meine Adresse</h3>
-			 <span id="MyAdress"></span>	
-		  <h2>Mein Stundenplan</h2>
-		  <button id= "Speichern">Speichern</button>
-		  <table>
-		 			<tr> <th>Wochentag</th> <th>Beginn</th> <th>Ende</th></tr>
-					<tr> <td>Montag</td> <td > <input type = "time" id = "BeginnMontag" name = "BeginnMontag"> </td> <td> <input type = "time" id = "EndeMontag" name = "EndeMontag"></td></tr>
-					<tr> <td>Dienstag</td> <td> <input type = "time" id = "BeginnDienstag" name = "BeginnDienstag"></td> <td> <input type = "time" id = "EndeDienstag" name = "EndeDienstag"></td></tr>
-					<tr> <td>Mittwoch</td> <td> <input type = "time" id = "BeginnMittwoch" name = "BeginnMittwoch"></td> <td> <input type = "time" id = "EndeMittwoch" name = "EndeMittwoch"></td></tr>
-					<tr> <td>Donnerstag</td> <td> <input type = "time" id = "BeginnDonnerstag" name = "BeginnDonnerstag"></td> <td> <input type = "time" id = "EndeDonnerstag" name = "EndeDonnerstag"></td></tr>  
-					<tr> <td>Freitag</td> <td> <input type = "time" id = "BeginnFreitag" name = "BeginnFreitag"></td> <td> <input type = "time" id = "EndeFreitag" name = "EndeFreitag"></td></tr> 
-					
-				</table>			
-			
-		</div>
+		
 		
 	<div id= "mainContainer" class="mainContainer">
 		<header>
@@ -77,11 +60,32 @@
 			<span class=WebsiteName-text style="white-space:nowrap;font-weight:bold;font-size: xx-large;"> Carpooling</span>
 				
 				<button class=logout id="logoutButton"type="button" style="width: 100px;">logout</button>
+				<button class=Stundenplan id="StundenplanButton"type="button" style="width: 100px;">Stundenplan</button>
+				<button class=Karte id="KartenButton"type="button" style="width: 100px;">Karte</button>
+				
+				
+				
 				<span id="logoutError"></span>
 				</div>
 		</header>
-		<article id =map>
+		<article id =MainPage>
 			<div id="mapid" style="height: 100%;"></div>
+			<div id =StundenplanContainer class ="StundenplanContainer">
+					
+			<h3>Meine Adresse</h3>
+			 <span id="MyAdress"></span>	
+		  <h2>Mein Stundenplan</h2>
+		  <button id= "Speichern">Speichern</button>
+		  <table>
+		 			<tr> <th>Wochentag</th> <th>Beginn</th> <th>Ende</th></tr>
+					<tr> <td>Montag</td> <td > <input type = "time" id = "BeginnMontag" name = "BeginnMontag"> </td> <td> <input type = "time" id = "EndeMontag" name = "EndeMontag"></td></tr>
+					<tr> <td>Dienstag</td> <td> <input type = "time" id = "BeginnDienstag" name = "BeginnDienstag"></td> <td> <input type = "time" id = "EndeDienstag" name = "EndeDienstag"></td></tr>
+					<tr> <td>Mittwoch</td> <td> <input type = "time" id = "BeginnMittwoch" name = "BeginnMittwoch"></td> <td> <input type = "time" id = "EndeMittwoch" name = "EndeMittwoch"></td></tr>
+					<tr> <td>Donnerstag</td> <td> <input type = "time" id = "BeginnDonnerstag" name = "BeginnDonnerstag"></td> <td> <input type = "time" id = "EndeDonnerstag" name = "EndeDonnerstag"></td></tr>  
+					<tr> <td>Freitag</td> <td> <input type = "time" id = "BeginnFreitag" name = "BeginnFreitag"></td> <td> <input type = "time" id = "EndeFreitag" name = "EndeFreitag"></td></tr> 
+					
+				</table>	
+				</div>		
 		</article>
 		<aside id=aside>
 		<div id="in">
@@ -113,7 +117,7 @@
           
           </div>
         </aside>
-	</div>
+        </div>
 </body>
 
 
