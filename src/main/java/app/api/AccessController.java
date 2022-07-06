@@ -1,5 +1,6 @@
 package app.api;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -18,6 +19,8 @@ import app.api.dto.LoginDto;
 import app.api.dto.Token;
 import app.api.dto.UserDtoIn;
 import app.dao.UserDAO;
+import app.model.User;
+
 import javax.transaction.Transactional;
 
 @Path("/access")
@@ -54,6 +57,17 @@ public class AccessController {
 		return accessManager.deregister(username) ? Response.ok().build() : Response.status(404).build();
 	}
 
+	@GET
+	public Integer UserID(String token) {
+		try {
+			UUID uuid = UUID.fromString(token);
+			System.out.println(uuid);
+			Optional<User> user =accessManager.getUser(uuid);
+			User Nutzer = user.get();
 
-
+			return Nutzer.getUserId();
+		} catch (Throwable thr) {
+			throw new RuntimeException("ERROR: login");
+	
+		}}
 }

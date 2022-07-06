@@ -208,6 +208,7 @@ function showLoginView(){
 
 function showLoggedinView(){
 	console.log("logged in view")
+	showImage();
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -507,10 +508,42 @@ function showMitfahrgelegenheiten(data){
 
 function showStundenplan(){
 	let Adresse = "PLACEHOLDER"
-	document.getElementById("MyAdress").value=Adresse
+	document.getElementById("MyAdress").innerHTML=Adresse;
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
 	setVisibility("StundenplanContainer", true);
 	setVisibility("mapid", false);
+}
+
+function showImage(){
+	let image = getImage();
+	let ProfileImage = document.getElementById("ProfileImage");
+	ProfileImage.src=image;
+}
+
+function getImage(){
+	console.log("getImage");
+	let user = getUser();
+	if(user){
+	return user.image;
+	}
+}
+
+function getUser(){
+	let token = sessionStorage.getItem('loginToken')
+	fetch('app/access?token='+token, {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+	})
+		.then(response => {
+			console.log("User: " + response);
+			return response;
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	
 }

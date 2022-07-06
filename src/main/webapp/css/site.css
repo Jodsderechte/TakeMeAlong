@@ -20,7 +20,7 @@ body {
   grid-template-areas:  
     "login" 
     "map"  
-
+	"aside"
  ; 
 }
 

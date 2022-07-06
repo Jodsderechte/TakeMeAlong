@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import app.dao.UserDAO;
+import app.model.User;
 
 @Singleton
 public class AccessManager 
@@ -61,5 +62,11 @@ public class AccessManager
 	public boolean hasAccess(UUID uuid)
 	{
 		return users.containsValue(uuid);
+	}
+	public Optional<User> getUser(UUID uuid) {
+		if(hasAccess(uuid)) {
+			return userDAO.findUser(getUsername(uuid));
+		}
+		return Optional.empty();
 	}
 }
