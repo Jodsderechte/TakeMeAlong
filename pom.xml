@@ -12,7 +12,7 @@
 		<jaeger.client.version>1.5.0</jaeger.client.version>
 		<slf4j.jdk.version>1.7.30</slf4j.jdk.version>
 		<maven.compiler.source>11</maven.compiler.source>
-		<final.name>microprofile_db_access</final.name>
+		<final.name>takeMeAlong</final.name>
 		<slf4j.api.version>1.7.30</slf4j.api.version>
 		<version.mysql>8.0.24</version.mysql>
 	</properties>
