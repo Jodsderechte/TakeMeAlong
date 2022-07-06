@@ -526,7 +526,21 @@ function getImage(){
 	console.log("getImage");
 	let user = getUser();
 	if(user){
-	return user.image;
+	let token = sessionStorage.getItem('loginToken')
+	fetch('app/image/{'+user.userID+'}?token='+token, {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+	})
+		.then(response => {
+			console.log("Image: " + response);
+			return response;
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	
 	}
 }
 

@@ -181,4 +181,29 @@ public class UserDAO {
 		}
 	}
 
+	private static final String getImage= "SELECT "
+			+ "image_data"
+			+ "FROM image  " + "WHERE imageID = ?";
+
+	@SuppressWarnings("unchecked")
+	public Optional<String> getImage(int user_id) {
+		User user = findUser(user_id).get();
+		Optional<String> ImageData = null;
+		try {
+			
+			Query sqlQuery = em.createNativeQuery(getImage);
+			sqlQuery.setParameter(1, user.getImageId());
+
+			final List<Object[]> results = (List<Object[]>) sqlQuery.getResultList();
+			for (Object[] row : results) {
+				ImageData = Optional.of((String) row[0]);
+			}
+
+			return ImageData;
+		} catch (Exception exce) {
+			exce.printStackTrace();
+			return Optional.empty();
+		}
+	}
+	
 }
