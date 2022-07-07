@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 @Table(name = "image")
 @NamedQueries({ 
 	@NamedQuery(name = "Image.findAll", query = "SELECT i FROM Image i"),
-	@NamedQuery(name = "Image.findByImageId", query = "SELECT i FROM image i WHERE i.image_id = :image_id") })
+	@NamedQuery(name = "Image.findByImageId", query = "SELECT i FROM Image i WHERE i.image_id = :image_id") })
 
 @SuppressWarnings("serial")
 public class Image implements Serializable {
@@ -29,7 +29,7 @@ public class Image implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id", nullable = false)
-    private Integer imageId;
+    private Integer image_id;
 	
 	@Column(nullable = false, unique = true)
     private String image_data;
@@ -38,11 +38,11 @@ public class Image implements Serializable {
     private String content_type;
 
 	public Integer getImageId() {
-		return imageId;
+		return image_id;
 	}
 
 	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
+		this.image_id = imageId;
 	}
 
 	public String getImage_data() {
@@ -63,7 +63,7 @@ public class Image implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(content_type, imageId);
+		return Objects.hash(content_type, image_id);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class Image implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Image other = (Image) obj;
-		return Objects.equals(content_type, other.content_type) && Objects.equals(imageId, other.imageId);
+		return Objects.equals(content_type, other.content_type) && Objects.equals(image_id, other.image_id);
 	}
 
 }

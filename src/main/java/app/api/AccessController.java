@@ -67,7 +67,7 @@ public class AccessController {
 
 			return Nutzer.getUserId();
 		} catch (Throwable thr) {
-			throw new RuntimeException("ERROR: login");
+			throw new RuntimeException("ERROR: UserID");
 	
 		}}
 }
