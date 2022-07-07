@@ -58,13 +58,13 @@ public class AccessController {
 	}
 
 	@GET
-	public Integer UserID(String token) {
+	public Integer UserID(@QueryParam("token") String token) {
 		try {
 			UUID uuid = UUID.fromString(token);
 			System.out.println(uuid);
 			Optional<User> user =accessManager.getUser(uuid);
 			User Nutzer = user.get();
-
+			System.out.println(Nutzer.getUserId());
 			return Nutzer.getUserId();
 		} catch (Throwable thr) {
 			throw new RuntimeException("ERROR: UserID");

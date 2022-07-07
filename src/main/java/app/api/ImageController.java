@@ -23,7 +23,9 @@ import app.api.dto.LoginDto;
 import app.api.dto.Token;
 import app.api.dto.UserDtoIn;
 import app.api.dto.UserDtoOut;
+import app.dao.ImageDAO;
 import app.dao.UserDAO;
+import app.model.Image;
 import app.model.User;
 
 
@@ -34,6 +36,8 @@ public class ImageController {
 
 	@Inject
 	private UserDAO userDAO;
+	@Inject
+	private ImageDAO imageDAO;
 	
 	@Inject
 	private AccessManager accessManager;
@@ -41,17 +45,39 @@ public class ImageController {
 
     @GET
     @Path("/{userId}")
-	public String getImage(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
+	public Response getImage(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
 	{
+    	System.out.println("getImagebyUserID");
 		if( accessManager.hasAccess(uuid) == false )
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
+		Image Bild = imageDAO.getImage(userId);
 		
-		Optional<String> image = userDAO.getImage(userId);
-		if( image.isPresent() )
+ 		if(Bild != null)
 		{
-			return image.get();
+			return Response.ok()
+					.entity(Bild.getImage_data())
+					.type(Bild.getContent_type()).build();
+		}
+		else
+		    throw new RuntimeException("ERROR: Image not found");
+	}
+    @GET
+	public Response getImagebyID(@QueryParam("imageId") int imageId, @QueryParam("token") UUID uuid) 
+	{
+    	System.out.println("getImagebyImageID"+imageId);
+    	if( accessManager.hasAccess(uuid) == false )
+		{
+			throw new RuntimeException("ERROR: Access not granted");
+		}
+		Image Bild = imageDAO.getImagebyId(imageId);
+		
+ 		if(Bild != null)
+		{
+			return Response.ok()
+					.entity(Bild.getImage_data())
+					.type(Bild.getContent_type()).build();
 		}
 		else
 		    throw new RuntimeException("ERROR: Image not found");

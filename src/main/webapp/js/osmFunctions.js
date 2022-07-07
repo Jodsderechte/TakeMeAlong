@@ -517,32 +517,37 @@ function showStundenplan(){
 }
 
 function showImage(){
-	let image = getImage();
-	let ProfileImage = document.getElementById("ProfileImage");
-	ProfileImage.src=image;
+	let data = getUser();
+	let div = document.getElementById("ProfileImage");
+	div.textContent = '';
+	let image = document.createElement("img");
+	image.src = data.imageContent;
+	image.height = "300";
+	div.append(image)
+
 }
 
-function getImage(){
+function getImage(userID){
 	console.log("getImage");
-	let user = getUser();
-	if(user){
+	if(userID){
 	let token = sessionStorage.getItem('loginToken')
-	fetch('app/image/{'+user.userID+'}?token='+token, {
+	fetch('app/image/'+userID+'/?token='+token, {
 		method: 'get',
 		headers: {
 			'Content-type': 'application/json'
 		},
 	})
-		.then(response => {
-			console.log("Image: " + response);
-			return response;
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+		return data
 		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+		.catch(error => console.error('Error:', error));
+		}
 	
-	}
 }
+
+
 
 function getUser(){
 	let token = sessionStorage.getItem('loginToken')
@@ -552,12 +557,11 @@ function getUser(){
 			'Content-type': 'application/json'
 		},
 	})
-		.then(response => {
-			console.log("User: " + response);
-			return response;
+		.then(response => response.json())
+		.then(data => {
+		console.log(data);
+		getImage(userID);
 		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+		.catch(error => console.error('Error:', error));
+		}
 	
-}
