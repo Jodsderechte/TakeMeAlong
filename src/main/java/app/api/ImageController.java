@@ -56,7 +56,7 @@ public class ImageController {
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
-		Image Bild = imageDAO.getImage(userId);
+		Image Bild = imageDAO.getImage(userId).get();
 		
  		if(Bild != null)
 		{
@@ -73,7 +73,7 @@ public class ImageController {
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
-		Image Bild = imageDAO.getImagebyId(imageId);
+		Image Bild = imageDAO.getImagebyId(imageId).get();
  		if(Bild != null)
 		{
 			return "data:"+Bild.getContent_type()+";base64,"+Bild.getImage_data();
