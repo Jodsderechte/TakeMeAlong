@@ -31,9 +31,20 @@ public class ImageDAO {
 	
 	public Image getImagebyId(int image_id) {
 		Image image = em.find(Image.class, image_id);
-		System.out.println(image);
+		System.out.println(image.getImageId());
 		return image;
 	}
 
-	
+	public int addImage(byte[] content) {
+				System.out.println("addImage"+content.toString());
+				Image image = new Image();
+				image.setImage_data(content);
+				image.setContent_type("image/jpeg");
+				
+				em.persist(image);
+				em.flush();
+				em.refresh(image);
+				return image.getImageId();
+		
+	}
 }

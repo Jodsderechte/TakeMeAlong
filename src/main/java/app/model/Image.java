@@ -32,7 +32,7 @@ public class Image implements Serializable {
     private Integer image_id;
 	
 	@Column(nullable = false, unique = true)
-    private String image_data;
+    private byte[] image_data;
 
 	@Column(length =30, nullable = false, unique = true)
     private String content_type;
@@ -45,11 +45,11 @@ public class Image implements Serializable {
 		this.image_id = imageId;
 	}
 
-	public String getImage_data() {
+	public byte[] getImage_data() {
 		return image_data;
 	}
 
-	public void setImage_data(String image_data) {
+	public void setImage_data(byte[] image_data) {
 		this.image_data = image_data;
 	}
 

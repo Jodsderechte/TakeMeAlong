@@ -207,8 +207,9 @@ function showLoginView(){
 }
 
 function showLoggedinView(){
-	console.log("logged in view")
-	showImage();
+	console.log("logged in view");
+	hideRegisterView();
+	getUserforImage();
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -264,35 +265,7 @@ function register() {
 console.log("register")
 	let file = document.getElementById("Profilbild").files[0];
 	console.log(file)
-	var reader = new FileReader();
-
-	if (file) {
-		reader.readAsDataURL(file);
-		reader.onload = function() {
-			console.log(JSON.stringify(reader.result))
-			let data = {
-				firstname: document.querySelector("#Vorname").value,
-				lastname: document.querySelector("#Nachname").value,
-				street: document.querySelector("#Straße").value,
-				streetNumber:document.querySelector("#NR").value,
-				zip: document.querySelector("#PLZ").value,
-				city: document.querySelector("#Ort").value,
-				email: document.querySelector("#EMail").value,
-				username: document.querySelector("#BenutzerID").value,
-				password: document.querySelector("#Passwort").value,
-				profileImage: reader.result
-			};
-			console.log(data)
-			registerUser(data);
-		};
-		reader.onerror = function(error) {
-			console.log('Error: ', error);
-		}
-	}
-	else {
-		let data = {
-			
-			
+	let data = {
 			username: document.querySelector("#BenutzerID").value,
 			password: document.querySelector("#Passwort").value,
 			firstname: document.querySelector("#Vorname").value,
@@ -302,10 +275,34 @@ console.log("register")
 			streetNumber: document.querySelector("#NR").value,
 			zip: document.querySelector("#PLZ").value,
 			city: document.querySelector("#Ort").value,
-			profileImage: ""
 		};
 		registerUser(data);
-	}
+	if (file) {
+		console.log("Imageparty")
+	document.getElementById("Profilbild").value="";
+	let token = sessionStorage.getItem('loginToken');
+	console.log("registerpicture token: "+token);
+	fetch('app/access?token='+token, {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+	})
+		.then(response => response.json())
+		.then(data => {
+		console.log(data);
+		fetch('app/image?token='+token+'&userId'+data, {
+		method: 'post',
+		headers: {
+			'Content-type': 'image/jpeg'
+		}, body: file
+	})
+		.catch(error => console.error('Error:', error));
+		})
+		.catch(error => console.error('Error:', error));
+		}
+	
+	
 }
 
 function registerUser(data) {
@@ -516,8 +513,8 @@ function showStundenplan(){
 	setVisibility("mapid", false);
 }
 
-function showImage(){
-	let data = getUser();
+function showImage(data){
+	console.log("Image: "+data)
 	let div = document.getElementById("ProfileImage");
 	div.textContent = '';
 	let image = document.createElement("img");
@@ -531,16 +528,15 @@ function getImage(userID){
 	console.log("getImage");
 	if(userID){
 	let token = sessionStorage.getItem('loginToken')
-	fetch('app/image/'+userID+'/?token='+token, {
-		method: 'get',
-		headers: {
-			'Content-type': 'application/json'
-		},
-	})
-		.then(response => response.json())
+	console.log(userID)
+	console.log(token)
+	fetch('/app/image/'+userID+'/?token='+token)
+		.then(response  => {
+			console.log(response);
+		})
 		.then(data => {
 			console.log(data);
-		return data
+		showImage(data)
 		})
 		.catch(error => console.error('Error:', error));
 		}
@@ -549,7 +545,7 @@ function getImage(userID){
 
 
 
-function getUser(){
+function getUserforImage(){
 	let token = sessionStorage.getItem('loginToken')
 	fetch('app/access?token='+token, {
 		method: 'get',
@@ -560,8 +556,11 @@ function getUser(){
 		.then(response => response.json())
 		.then(data => {
 		console.log(data);
-		getImage(userID);
+		getImage(data);
 		})
 		.catch(error => console.error('Error:', error));
 		}
+	
+	
+
 	

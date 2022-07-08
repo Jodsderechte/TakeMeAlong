@@ -1,5 +1,6 @@
 package app.api.dto;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 
@@ -14,18 +15,18 @@ public class UserDtoIn implements Serializable {
 	private String streetNumber;
 	private String zip;
 	private String city;
-	private String profileImage;
+	private InputStream profileImage;
 	
 	public UserDtoIn()
 	{
 	
 	}
-	public String getprofileImage() {
+	public InputStream getprofileImage() {
 		return profileImage;
 	}
 
 
-	public void setprofileImage(String profileImage) {
+	public void setprofileImage(InputStream profileImage) {
 		this.profileImage = profileImage;
 	}
 	

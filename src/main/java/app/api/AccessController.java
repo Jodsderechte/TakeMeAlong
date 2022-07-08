@@ -59,6 +59,7 @@ public class AccessController {
 
 	@GET
 	public Integer UserID(@QueryParam("token") String token) {
+		System.out.println("USERID LOGINTOKEN: "+token);
 		try {
 			UUID uuid = UUID.fromString(token);
 			System.out.println(uuid);
