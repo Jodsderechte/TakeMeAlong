@@ -3,12 +3,15 @@ package app.api;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -51,6 +54,21 @@ public class TimeController {
 			}
 			return result.stream().map( TimeTableDto::new ).collect(Collectors.toList() );	
 	 	
+
+
+}
+	 
+	 @POST
+		@Transactional
+		public void addTimeTableforWeekday(@QueryParam("token") UUID uuid, TimeTableDto TimeTable) 
+		{
+		 		if( accessManager.hasAccess(uuid) == false )
+		 			{
+		 				throw new RuntimeException("ERROR: Access not granted");
+		 			}
+	    timeTableDAO.addTimeTable(TimeTable.getUser_id(), TimeTable.getWeekday(), TimeTable.getStart_Time(), TimeTable.getEnd_time());
+			
+			
 
 
 }

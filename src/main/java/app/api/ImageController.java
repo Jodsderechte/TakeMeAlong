@@ -82,7 +82,7 @@ public class ImageController {
 		    throw new RuntimeException("ERROR: Image not found");
 	}
     
-    
+    @Transactional
     @POST
     @Consumes({"image/jpeg"})
     @Produces (MediaType. APPLICATION_JSON)
