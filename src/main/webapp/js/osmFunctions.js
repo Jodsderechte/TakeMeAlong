@@ -278,32 +278,8 @@ console.log("register")
 		};
 		registerUser(data);
 	if (file) {
-		console.log("Imageparty")
-	document.getElementById("Profilbild").value="";
-	let token = sessionStorage.getItem('loginToken');
-	console.log("registerpicture token: "+token);
-	fetch('app/access?token='+token, {
-		method: 'get',
-		headers: {
-			'Content-type': 'application/json'
-		},
-	})
-		.then(response => response.json())
-		.then(data => {
-		console.log(data);
-		fetch('app/image?token='+token+'&userId'+data, {
-		method: 'post',
-		headers: {
-			'Content-type': 'image/jpeg'
-		}, body: file
-	})
-		.catch(error => console.error('Error:', error));
-		})
-		.catch(error => console.error('Error:', error));
-		}
-	
-	
-}
+		registerImage(file);
+		}}
 
 function registerUser(data) {
 	console.log(JSON.stringify(data))
@@ -333,6 +309,33 @@ function registerUser(data) {
 			console.error('Error:', error);
 		});
 }
+
+function registerImage(file){
+	console.log("Imageparty")
+	document.getElementById("Profilbild").value="";
+	let token = sessionStorage.getItem('loginToken');
+	console.log("registerpicture token: "+token);
+	fetch('app/access?token='+token, {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+	})
+		.then(response => response.json())
+		.then(data => {
+		console.log(data);
+		fetch('app/image?token='+token+'&userId'+data, {
+		method: 'post',
+		headers: {
+			'Content-type': 'image/jpeg'
+		}, body: file
+	})
+		.catch(error => console.error('Error:', error));
+		})
+		.catch(error => console.error('Error:', error));
+		}
+	
+	
 
 function resetpwdGradient(){
 	var c = document.querySelector("#pwdCanvas");

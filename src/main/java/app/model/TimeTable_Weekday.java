@@ -18,14 +18,14 @@ import javax.persistence.Table;
 @IdClass(TimeTableID.class)
 @Table(name = "timetable_weekday")
 @NamedQueries({ 
-	@NamedQuery(name = "timetable_weekday.findAll", query = "SELECT t FROM timetable_weekday t"),
-	@NamedQuery(name = "timetable_weekday.findByUserId", query = "SELECT t FROM timetable_weekday t WHERE t.user_id = :user_id and t.weekday =:weekday") })
+	@NamedQuery(name = "timetable_weekday.findAll", query = "SELECT t FROM TimeTable_Weekday t"),
+	@NamedQuery(name = "timetable_weekday.findByUserId", query = "SELECT t FROM TimeTable_Weekday t WHERE t.user_id = :user_id and t.weekday =:weekday") })
 
 @SuppressWarnings("serial")
 public class TimeTable_Weekday implements Serializable {
 		@Id
 	 	@Column(name = "user_id", nullable = false)
-	    private Integer userId;
+	    private Integer user_id;
 		@Id
 		@Column(name = "weekday", nullable = false)
 	    private Integer weekday;
@@ -37,11 +37,11 @@ public class TimeTable_Weekday implements Serializable {
 	    private Time end_time;
 
 		public Integer getUserId() {
-			return userId;
+			return user_id;
 		}
 
 		public void setUserId(Integer userId) {
-			this.userId = userId;
+			this.user_id = userId;
 		}
 
 		public Integer getWeekday() {
@@ -70,7 +70,7 @@ public class TimeTable_Weekday implements Serializable {
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(userId, weekday);
+			return Objects.hash(user_id, weekday);
 		}
 
 		@Override
@@ -82,7 +82,7 @@ public class TimeTable_Weekday implements Serializable {
 			if (getClass() != obj.getClass())
 				return false;
 			TimeTable_Weekday other = (TimeTable_Weekday) obj;
-			return Objects.equals(userId, other.userId) && Objects.equals(weekday, other.weekday);
+			return Objects.equals(user_id, other.user_id) && Objects.equals(weekday, other.weekday);
 		}
 
 		

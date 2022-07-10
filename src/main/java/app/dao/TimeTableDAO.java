@@ -15,7 +15,6 @@ import app.model.TimeTable_Weekday;
 import app.model.User;
 
 @Singleton
-@IdClass(TimeTableID.class)
 public class TimeTableDAO {
 
 	@PersistenceContext(name = "jpa-unit")
