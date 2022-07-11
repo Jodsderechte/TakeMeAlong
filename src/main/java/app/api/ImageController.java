@@ -48,32 +48,38 @@ public class ImageController {
 	
 
     @GET
-    @Path("/{userId}")
-	public String getImage(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
+	public Response getOwnImage(@QueryParam("token") UUID uuid) 
 	{
-    	System.out.println("getImagebyUserID"+userId);
 		if( accessManager.hasAccess(uuid) == false )
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
-		Image Bild = imageDAO.getImage(userId);
+		Optional<User> user =accessManager.getUser(uuid);
+		if(user.isPresent()) {
+		Optional<Image> Bild = imageDAO.getImage(user.get().getUserId());
 		
- 		if(Bild != null)
-		{
- 			return "data:"+Bild.getContent_type()+";base64,"+Bild.getImage_data();
-		}
-		else
-		    throw new RuntimeException("ERROR: Image not found");
-	}
+		 try {
+	            if (Bild.isPresent()) {
+	                return Response.ok().entity(Bild.get().getImage_data()).type("image/jpeg").build();
+	            } else {
+	            	throw new RuntimeException("ERROR: Image not found");
+	            }
+	        } catch (Exception e) {
+	            System.out.println("ERROR " + e.getMessage());
+	            return Response.status(404).build();
+	        }
+		}else	throw new RuntimeException("ERROR: User for Image not found");
+}
     @GET
-	public String getImagebyID(@QueryParam("imageId") int imageId, @QueryParam("token") UUID uuid) 
+    @Path("/{imageId}")
+	public String getImagebyID(@PathParam("imageId") int imageId, @QueryParam("token") UUID uuid) 
 	{
     	System.out.println("getImagebyImageID"+imageId);
     	if( accessManager.hasAccess(uuid) == false )
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
-		Image Bild = imageDAO.getImagebyId(imageId);
+		Image Bild = imageDAO.getImagebyId(imageId).get();
  		if(Bild != null)
 		{
 			return "data:"+Bild.getContent_type()+";base64,"+Bild.getImage_data();
@@ -82,26 +88,19 @@ public class ImageController {
 		    throw new RuntimeException("ERROR: Image not found");
 	}
     
-    
+    @Transactional
     @POST
     @Consumes({"image/jpeg"})
     @Produces (MediaType. APPLICATION_JSON)
-   	public Response addImageforUser(@QueryParam("userId") int userId, @QueryParam("token") UUID uuid, InputStream inputStream) 
+   	public Response addImage( InputStream inputStream) 
    	{
-    	if( accessManager.hasAccess(uuid) == false )
-		{
-			throw new RuntimeException("ERROR: Access not granted");
-		}
-    	System.out.println("Profilbild geupdated");
-    	Optional<User> user =accessManager.getUser(uuid);
-		User Nutzer = user.get();
+    	// no check if User has Access due to ease of use - Security risk
 		byte[] content;
 		try {
 			content = inputStream.readAllBytes();
 			int imageId = imageDAO.addImage(content);
 			System.out.println(imageId);
-			Nutzer.setImageId(imageId);
-	    	return Response.ok().build();
+	    	return Response.ok().entity(imageId).build();
 		} catch (IOException e) {
 			System.out.println("ERROR "+e.getMessage());
 		 return Response.status(404).build();

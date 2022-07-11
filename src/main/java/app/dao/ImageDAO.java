@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -12,7 +13,7 @@ import app.model.Image;
 import app.model.User;
 
 
-
+@Singleton
 public class ImageDAO {
 	@PersistenceContext(name = "jpa-unit")
     EntityManager em;
@@ -22,18 +23,32 @@ public class ImageDAO {
 	
 
 	
-	public Image getImage(int user_id) {
+	public Optional<Image> getImage(int user_id) {
 		User user = userDAO.findUser(user_id).get();
-		Image image = em.find(Image.class, user.getImageId());
-		System.out.println(image);
-		return image;
+		Query query = em.createNamedQuery("Image.findByImageId", Image.class);
+        query.setParameter("image_id", user.getImageId());
+        Image image =  (Image) query.getSingleResult();
+
+		if (image != null) {
+			return Optional.of(image);
+		} else {
+			return Optional.empty();
+		}
 	}
 	
-	public Image getImagebyId(int image_id) {
-		Image image = em.find(Image.class, image_id);
-		System.out.println(image.getImageId());
-		return image;
-	}
+	public  Optional<Image>  getImagebyId(int image_id) {
+		Query query = em.createNamedQuery("Image.findByImageId", Image.class);
+
+        query.setParameter("image_id", image_id);
+
+        Image image =  (Image) query.getSingleResult();
+
+        if (image != null) {
+            return Optional.of(image);
+        } else {
+            return Optional.empty();
+        }
+    }
 
 	public int addImage(byte[] content) {
 				System.out.println("addImage"+content.toString());

@@ -64,9 +64,6 @@ window.onload = function() {
 	
 	
 	
-	var Hackerbutton= document.getElementById("Hackerbutton");
-	Hackerbutton.onclick = showLoggedinView;
-	
 	
 	let token = sessionStorage.getItem('loginToken');
 	
@@ -209,7 +206,7 @@ function showLoginView(){
 function showLoggedinView(){
 	console.log("logged in view");
 	hideRegisterView();
-	getUserforImage();
+	showOwnImage();
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -275,36 +272,37 @@ console.log("register")
 			streetNumber: document.querySelector("#NR").value,
 			zip: document.querySelector("#PLZ").value,
 			city: document.querySelector("#Ort").value,
+			imageId: 1,
 		};
-		registerUser(data);
-	if (file) {
-		console.log("Imageparty")
-	document.getElementById("Profilbild").value="";
-	let token = sessionStorage.getItem('loginToken');
-	console.log("registerpicture token: "+token);
-	fetch('app/access?token='+token, {
-		method: 'get',
-		headers: {
-			'Content-type': 'application/json'
-		},
-	})
-		.then(response => response.json())
-		.then(data => {
-		console.log(data);
-		fetch('app/image?token='+token+'&userId'+data, {
+		if (file) {
+			document.getElementById("Profilbild").value="";
+	
+		fetch('app/image', {
 		method: 'post',
 		headers: {
 			'Content-type': 'image/jpeg'
 		}, body: file
-	})
-		.catch(error => console.error('Error:', error));
-		})
-		.catch(error => console.error('Error:', error));
+	}) .then(response => {
+  		 if (!response.ok) {
+   		 	console.error('Es ist ein Fehler aufgetreten!');
+        	 throw Error(response.statusText);
+          }
+         return response.json();
+         })
+       .then(imageData => {
+			 // add imageId to the user object
+			 console.log('Image created: '+imageData)
+ 			 Object.assign(data, {imageId: imageData});
+			 registerUser(data);
+         })
+  		.catch(error => {
+          console.error('Error:', error);
+		});
 		}
-	
-	
+		else{
+		registerUser(data);	
+		}
 }
-
 function registerUser(data) {
 	console.log(JSON.stringify(data))
 	fetch('app/user', {
@@ -333,6 +331,8 @@ function registerUser(data) {
 			console.error('Error:', error);
 		});
 }
+	
+	
 
 function resetpwdGradient(){
 	var c = document.querySelector("#pwdCanvas");
@@ -505,7 +505,31 @@ function showMitfahrgelegenheiten(data){
 
 function showStundenplan(){
 	let Adresse = "PLACEHOLDER"
-	document.getElementById("MyAdress").innerHTML=Adresse;
+	let token = sessionStorage.getItem('loginToken')
+	fetch('app/access?token='+token, {
+		method: 'get',
+		headers: {
+			'Content-type': 'application/json'
+		},
+	})
+		.then(response => response.json())
+		.then(data => {
+		console.log('userid: '+data);
+		getStundenplanData(data);
+		fetch('app/user/'+data+'?token='+token, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(data => {
+		console.log(data);
+		Adresse= data.street+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
+		document.getElementById("MyAdress").innerHTML=Adresse;
+		})
+		.catch(error => console.error('Error:', error));
+		})
+		.catch(error => console.error('Error:', error));
+		
+		
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -513,16 +537,63 @@ function showStundenplan(){
 	setVisibility("mapid", false);
 }
 
-function showImage(data){
-	console.log("Image: "+data)
-	let div = document.getElementById("ProfileImage");
-	div.textContent = '';
-	let image = document.createElement("img");
-	image.src = data.imageContent;
-	image.height = "300";
-	div.append(image)
+function getStundenplanData(userId){
+	let token = sessionStorage.getItem('loginToken')
+	console.log("getStundenplanDat" +userId);
+	fetch('app/time/'+userId+'?token='+token, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(data => {
+		console.log(data);
+		let Wochentag = [];
+		for (let i in data) {
+ 			switch(data[i].weekday) {
+				case 1: {
+					document.getElementById("BeginnMontag").value=data[i].start_Time;
+					document.getElementById("EndeMontag").value=data[i].start_Time;
+					break;
+					}
+				case 2: {
+					document.getElementById("BeginnDienstag").value=data[i].start_Time;
+					document.getElementById("EndeDienstag").value=data[i].start_Time;
+					break;
+					}
+				case 3: {
+					document.getElementById("BeginnMittwoch").value=data[i].start_Time;
+					document.getElementById("EndeMittwoch").value=data[i].start_Time;
+					break;
+					}	
+				case 4: {
+					document.getElementById("BeginnDonnerstag").value=data[i].start_Time;
+					document.getElementById("EndeDonnerstag").value=data[i].start_Time;
+					break;
+					}
+				case 5: {
+					document.getElementById("BeginnFreitag").value=data[i].start_Time;
+					document.getElementById("EndeFreitag").value=data[i].start_Time;
+					break;
+					}
+				default: {
+					console.log('Weekday does not exist');
+					console.log(data[i].weekday);
+					break;
+				}
+	
+			}
+	
+ 			
+ 			
+ 			
+ 			
+ 			
+			}
+		console.log(Wochentag);
+		})
+		.catch(error => console.error('Error:', error));
 
 }
+
 
 function getImage(userID){
 	console.log("getImage");
@@ -543,24 +614,28 @@ function getImage(userID){
 	
 }
 
-
-
-function getUserforImage(){
+	
+function showOwnImage(){
 	let token = sessionStorage.getItem('loginToken')
-	fetch('app/access?token='+token, {
-		method: 'get',
-		headers: {
-			'Content-type': 'application/json'
-		},
-	})
-		.then(response => response.json())
-		.then(data => {
-		console.log(data);
-		getImage(data);
-		})
-		.catch(error => console.error('Error:', error));
-		}
+	 fetch('app/image/?token=' + token)
+         .then(response => response.arrayBuffer())
+         .then(imageData => {
+            return {
+            	"imageContent": imageData
+                 };
+             })
+         .then(data => {
+			console.log(data);
+			let div = document.getElementById("ProfileImage");
+			div.textContent = '';
+			let image = document.createElement("img");
+			image.src = URL.createObjectURL(
+				new Blob([data.imageContent],
+				 {type: 'image/jpeg'}));
+			image.height = "60";
+			div.append(image);
+            })
+          .catch(error => console.error('Error: ', error));
 	
-	
-
+}
 	
