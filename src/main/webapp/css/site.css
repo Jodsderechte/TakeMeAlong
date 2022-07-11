@@ -24,6 +24,36 @@ body {
  ; 
 }
 
+.loggedIn{
+	grid-template-rows:  min-content 1fr; 
+    grid-template-columns: 1fr min-content;
+    grid-template-areas:  
+      "WebsiteName		logout		Stundenplan		Karte		logoutError		ProfileImage" 
+    ;	
+}
+
+.WebsiteName{
+	grid-area: WebsiteName
+}
+
+.logoutButton{
+	grid-area: logout
+}
+
+.StundenplanButton{
+	grid-area: Stundenplan
+}
+.KartenButton{
+	grid-area: Karte
+}
+.logoutError{
+	grid-area: logoutError
+}
+
+.ProfileImage{
+	grid-area: ProfileImage
+}
+
 .StundenplanContainer{
 	height: 100%; 	
 } 

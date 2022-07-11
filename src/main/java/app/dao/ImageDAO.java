@@ -25,7 +25,10 @@ public class ImageDAO {
 	
 	public Optional<Image> getImage(int user_id) {
 		User user = userDAO.findUser(user_id).get();
-		Image image = em.find(Image.class, user.getImageId());
+		Query query = em.createNamedQuery("Image.findByImageId", Image.class);
+        query.setParameter("image_id", user.getImageId());
+        Image image =  (Image) query.getSingleResult();
+
 		if (image != null) {
 			return Optional.of(image);
 		} else {
@@ -34,13 +37,18 @@ public class ImageDAO {
 	}
 	
 	public  Optional<Image>  getImagebyId(int image_id) {
-		Image image = em.find(Image.class, image_id);
-		if (image != null) {
-			return Optional.of(image);
-		} else {
-			return Optional.empty();
-		}
-	}
+		Query query = em.createNamedQuery("Image.findByImageId", Image.class);
+
+        query.setParameter("image_id", image_id);
+
+        Image image =  (Image) query.getSingleResult();
+
+        if (image != null) {
+            return Optional.of(image);
+        } else {
+            return Optional.empty();
+        }
+    }
 
 	public int addImage(byte[] content) {
 				System.out.println("addImage"+content.toString());

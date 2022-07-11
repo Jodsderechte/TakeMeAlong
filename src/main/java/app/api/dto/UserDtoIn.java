@@ -15,21 +15,24 @@ public class UserDtoIn implements Serializable {
 	private String streetNumber;
 	private String zip;
 	private String city;
-	private InputStream profileImage;
-	
+	private String imageId;
 	public UserDtoIn()
 	{
 	
 	}
-	public InputStream getprofileImage() {
-		return profileImage;
-	}
 
-
-	public void setprofileImage(InputStream profileImage) {
-		this.profileImage = profileImage;
-	}
 	
+	public String getImageId() {
+		return imageId;
+	}
+
+
+	public void setImageid(String imageId) {
+		this.imageId = imageId;
+		System.out.println(this);
+	}
+
+
 	public String getPassword() {
 		return password;
 	}
@@ -89,12 +92,15 @@ public class UserDtoIn implements Serializable {
 	public void setCity(String city) {
 		this.city = city;
 	}
+
+
 	@Override
 	public String toString() {
 		return "UserDtoIn [username=" + username + ", password=" + password + ", firstname=" + firstname + ", lastname="
 				+ lastname + ", email=" + email + ", street=" + street + ", streetNumber=" + streetNumber + ", zip="
-				+ zip + ", city=" + city + ", profileImage=" + profileImage + "]";
+				+ zip + ", city=" + city + ", imageId=" + imageId + "]";
 	}
+	
 	
 	
 }

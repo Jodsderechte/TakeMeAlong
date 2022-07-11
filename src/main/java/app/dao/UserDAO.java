@@ -69,7 +69,7 @@ public class UserDAO {
 	}
 
 	public User createUser(String username, String password, String firstname, String lastname, String email,
-			String street, String streetNumber, String zip, String city) {
+			String street, String streetNumber, String zip, String city, int imageId) {
 
 		try {
 			User user = new User();
@@ -82,7 +82,7 @@ public class UserDAO {
 			user.setStreetNumber(streetNumber);
 			user.setZip(zip);
 			user.setCity(city);
-			user.setImageId(1);
+			user.setImageId(imageId);
 			System.out.println(user);			
 			Optional<Position> position = geoCoder.geocode(street, streetNumber, zip, city, "Germany");
 			

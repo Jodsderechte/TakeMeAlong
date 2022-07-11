@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import app.api.access.AccessManager;
 import app.api.dto.TimeTableDto;
+import app.api.dto.TimeTableDtoOut;
 import app.api.dto.UserDtoOut;
 import app.dao.ImageDAO;
 import app.dao.TimeTableDAO;
@@ -41,7 +42,7 @@ public class TimeController {
 	
 	 @GET
 	    @Path("/{userId}")
-		public List<TimeTableDto> getTimetableforWeek(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
+		public List<TimeTableDtoOut> getTimetableforWeek(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
 		{
 	    	if( accessManager.hasAccess(uuid) == false )
 			{
@@ -50,10 +51,10 @@ public class TimeController {
 	    	
 	    	List<TimeTable_Weekday> result = new ArrayList<TimeTable_Weekday>();
 			for(int i=1; i<8; i++) {
-				result.add(timeTableDAO.getTimeTableforUser(userId, i).get());
+				if(timeTableDAO.getTimeTableforUser(userId, i).isPresent()) {
+				result.add(timeTableDAO.getTimeTableforUser(userId, i).get());}
 			}
-			return result.stream().map( TimeTableDto::new ).collect(Collectors.toList() );	
-	 	
+			return result.stream().map( TimeTableDtoOut::new ).collect(Collectors.toList() );	
 
 
 }
