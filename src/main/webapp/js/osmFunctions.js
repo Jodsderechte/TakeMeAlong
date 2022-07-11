@@ -105,31 +105,22 @@ function hideRegisterView() {
 }
 	
 
-function setMarker() {
-	var street = document.querySelector("#street").value;
-	var streetNr = document.querySelector("#streetNr").value;
-	var zip = document.querySelector("#zip").value;
-	var city = document.querySelector("#city").value;
+function setMarker(data) {
+	console.log(data)
+	var street = data.street;
+	var streetNr = data.streetNumber;
+	var zip = data.zip;
+	var city = data.city;
 	var query = "streetNr=" + streetNr +"&"
 	query += "street=" + street + "&";
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
 	query += "city=" + city;
 	console.log(query);
-	const myInit = {
-		method: 'GET',
-		headers: {
-			'Accept': 'application/json',
-		},
-	};
-
-	const myRequest = new Request('locationconverter?' + query, myInit);
-
-	fetch(myRequest)
-		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
+	
+	fetch('app/location?' + query)
+		.then(response => response.json())
+		.then(data => {
 			console.log(data.lat);
 			console.log(data.lon);
 			let marker = new L.Marker([data.lat, data.lon]); 
@@ -207,6 +198,7 @@ function showLoggedinView(){
 	console.log("logged in view");
 	hideRegisterView();
 	showOwnImage();
+	loadStundenplan()
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -503,7 +495,17 @@ function showMitfahrgelegenheiten(data){
 	document.getElementById("out").value=data
 }
 
+
 function showStundenplan(){
+	loadStundenplan()
+	setVisibility("aside", true);
+	setVisibility("login", false);
+	setVisibility("loggedIn", true);
+	setVisibility("StundenplanContainer", true);
+	setVisibility("mapid", false);
+
+}
+function loadStundenplan(){
 	let Adresse = "PLACEHOLDER"
 	let token = sessionStorage.getItem('loginToken')
 	fetch('app/access?token='+token, {
@@ -522,6 +524,7 @@ function showStundenplan(){
 		.then(response => response.json())
 		.then(data => {
 		console.log(data);
+		setMarker(data)
 		Adresse= data.street+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
 		document.getElementById("MyAdress").innerHTML=Adresse;
 		})
@@ -529,12 +532,6 @@ function showStundenplan(){
 		})
 		.catch(error => console.error('Error:', error));
 		
-		
-	setVisibility("aside", true);
-	setVisibility("login", false);
-	setVisibility("loggedIn", true);
-	setVisibility("StundenplanContainer", true);
-	setVisibility("mapid", false);
 }
 
 function getStundenplanData(userId){
