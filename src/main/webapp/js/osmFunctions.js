@@ -61,7 +61,8 @@ window.onload = function() {
 	StundenplanButton.onclick = showStundenplan;
 	var KartenButton= document.getElementById("KartenButton");
 	KartenButton.onclick = showLoggedinView;
-	
+	var SuchenButton = document.getElementById("Suchen");
+	SuchenButton.onclick = sucheMitfahrgelegenheit;
 	
 	
 	
@@ -455,21 +456,20 @@ else {
 
 
 function sucheMitfahrgelegenheit(){
-	showLoggedinView;
-	let Fahrart = document.querySelector('input[name="Fahrart"]:checked').value;
+	let Fahrart = ""
+	if(document.querySelector('input[name="Fahrart"]:checked')){
+	Fahrart = document.querySelector('input[name="Fahrart"]:checked').value; }
 	let Wochentag = document.getElementById("Wochentag").value;	
 	let Zeit = document.getElementById("Zeit").value;
+	let token = sessionStorage.getItem('loginToken');
+	let Umkreis = document.getElementById("Umkreis").value;
 	console.log(Fahrart);
-		let data = {
-				distance:document.getElementById("Umkreis").value,
-				token: sessionStorage.getItem('loginToken')
-			};
-	fetch('app/user', {
+	console.log("Weekday "+Wochentag);
+	fetch('app/user?token='+token+'&distance='+Umkreis, {
 		method: 'get',
 		headers: {
 			'Content-type': 'application/json'
 		},
-		body: JSON.stringify(data)
 	})
 		.then(response => {
 			if (!response.ok) {
@@ -479,20 +479,70 @@ function sucheMitfahrgelegenheit(){
 			return response.json();
 		})
 		.then(data => {
-			checkWeekTime(data);
+			checkWeekTime(data,Zeit,Wochentag,Fahrart);
 		})
 		.catch(error => {
 			console.error('Error:', error);
 		});
 }
 
-function checkWeekTime(data){
-	console.log(data);
-	showMitfahrgelegenheiten(data);
+function checkWeekTime(UserTable,time,wochentag,Fahrart){
+	let token = sessionStorage.getItem('loginToken');
+	for (let i in UserTable) {
+		fetch('app/time?userId='+UserTable[i].userId+'&token='+token+'&weekday='+wochentag, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(data => {
+		if(data.end_time>time){
+			showMitfahrgelegenheiten(data);
+		}
+		})
+		.catch(error =>{});
+}
 }
 
-function showMitfahrgelegenheiten(data){
-	document.getElementById("out").value=data
+function showMitfahrgelegenheiten(userTable){
+	console.log("SHOWING MITFAHRGELEGENHEITEN");
+	console.log(userTable);
+	let token = sessionStorage.getItem('loginToken');
+	let out=document.getElementById("out")
+	
+		let newdiv = document.createElement("div")
+		newdiv.className= "MitfahrgelegenheitenOutput"
+		out.append(newdiv);
+		fetch('app/user/'+userTable.user_id+'?token='+token, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(User => {
+		console.log(User);
+		fetch('app/image/user/'+User.userId+'?token=' + token)
+         .then(response => response.arrayBuffer())
+         .then(imageData => {
+            return {
+            	"imageContent": imageData
+                 };
+             })
+         .then(data => {
+		console.log('IMAGE RETRIEVED')+data
+			let image = document.createElement("img");
+			image.src = URL.createObjectURL(
+				new Blob([data.imageContent],
+				 {type: 'image/jpeg'}));
+			image.height = "100";
+			newdiv.append(image);
+			let textBox = document.createTextNode(User.firstname+' '+User.lastname);
+			let textBox2 = document.createTextNode(User.email);
+			let textBox3 = document.createTextNode(userTable.start_Time+" - "+userTable.end_time);
+			let textBox4 = document.createTextNode(User.street+' '+User.streetNumber+" "+User.zip+" "+User.city);
+			newdiv.append(textBox);
+			newdiv.append(textBox2);
+			newdiv.append(textBox3);
+			newdiv.append(textBox4);
+            })
+          .catch(error => console.error('Error: ', error));
+		})	
 }
 
 
@@ -545,30 +595,31 @@ function getStundenplanData(userId){
 		console.log(data);
 		let Wochentag = [];
 		for (let i in data) {
+			console.log(data[i].end_time)
  			switch(data[i].weekday) {
 				case 1: {
 					document.getElementById("BeginnMontag").value=data[i].start_Time;
-					document.getElementById("EndeMontag").value=data[i].start_Time;
+					document.getElementById("EndeMontag").value=data[i].end_time;
 					break;
 					}
 				case 2: {
 					document.getElementById("BeginnDienstag").value=data[i].start_Time;
-					document.getElementById("EndeDienstag").value=data[i].start_Time;
+					document.getElementById("EndeDienstag").value=data[i].end_time;
 					break;
 					}
 				case 3: {
 					document.getElementById("BeginnMittwoch").value=data[i].start_Time;
-					document.getElementById("EndeMittwoch").value=data[i].start_Time;
+					document.getElementById("EndeMittwoch").value=data[i].end_time;
 					break;
 					}	
 				case 4: {
 					document.getElementById("BeginnDonnerstag").value=data[i].start_Time;
-					document.getElementById("EndeDonnerstag").value=data[i].start_Time;
+					document.getElementById("EndeDonnerstag").value=data[i].end_time;
 					break;
 					}
 				case 5: {
 					document.getElementById("BeginnFreitag").value=data[i].start_Time;
-					document.getElementById("EndeFreitag").value=data[i].start_Time;
+					document.getElementById("EndeFreitag").value=data[i].end_time;
 					break;
 					}
 				default: {
@@ -578,12 +629,7 @@ function getStundenplanData(userId){
 				}
 	
 			}
-	
- 			
- 			
- 			
- 			
- 			
+			
 			}
 		console.log(Wochentag);
 		})

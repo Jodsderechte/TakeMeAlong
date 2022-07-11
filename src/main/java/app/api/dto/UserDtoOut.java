@@ -14,6 +14,7 @@ public class UserDtoOut implements Serializable {
 	private String streetNumber;
 	private String zip;
 	private String city;
+	private Integer userId;
 	
 	public UserDtoOut()
 	{
@@ -30,6 +31,7 @@ public class UserDtoOut implements Serializable {
 		this.streetNumber = user.getStreetNumber();
 		this.zip = user.getZip();
 		this.city = user.getCity();
+		this.userId=user.getUserId();
 		
 	}
 	
@@ -81,6 +83,14 @@ public class UserDtoOut implements Serializable {
 	}
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 	
 	

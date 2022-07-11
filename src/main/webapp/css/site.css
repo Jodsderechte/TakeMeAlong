@@ -58,6 +58,11 @@ body {
 	height: 100%; 	
 } 
 
+.MitfahrgelegenheitenOutput{
+	border:1px solid black;
+	background:	#FFFFFF;
+}
+
 @media screen and (min-width: 44em) { 
   .mainContainer { 
     height: 100%;
