@@ -70,24 +70,58 @@ public class ImageController {
 	        }
 		}else	throw new RuntimeException("ERROR: User for Image not found");
 }
+    
+    @Path("/user/{userId}")
+    @GET
+	public Response getImageforUser(@PathParam("userId") int userId,@QueryParam("token") UUID uuid) 
+	{
+		if( accessManager.hasAccess(uuid) == false )
+		{
+			throw new RuntimeException("ERROR: Access not granted");
+		}
+		Optional<User> user = userDAO.findUser(userId);
+		if(user.isPresent()) {
+		Optional<Image> Bild = imageDAO.getImage(user.get().getUserId());
+		
+		 try {
+	            if (Bild.isPresent()) {
+	                return Response.ok().entity(Bild.get().getImage_data()).type("image/jpeg").build();
+	            } else {
+	            	throw new RuntimeException("ERROR: Image not found");
+	            }
+	        } catch (Exception e) {
+	            System.out.println("ERROR " + e.getMessage());
+	            return Response.status(404).build();
+	        }
+		}else	throw new RuntimeException("ERROR: User for Image not found");
+}
+        
+    
+    
+    
+    
     @GET
     @Path("/{imageId}")
-	public String getImagebyID(@PathParam("imageId") int imageId, @QueryParam("token") UUID uuid) 
+	public Response getImagebyID(@PathParam("imageId") int imageId, @QueryParam("token") UUID uuid) 
 	{
     	System.out.println("getImagebyImageID"+imageId);
     	if( accessManager.hasAccess(uuid) == false )
 		{
 			throw new RuntimeException("ERROR: Access not granted");
 		}
-		Image Bild = imageDAO.getImagebyId(imageId).get();
- 		if(Bild != null)
-		{
-			return "data:"+Bild.getContent_type()+";base64,"+Bild.getImage_data();
-		}
-		else
-		    throw new RuntimeException("ERROR: Image not found");
+    	Optional<Image> Bild = imageDAO.getImagebyId(imageId);
+		
+		 try {
+	            if (Bild.isPresent()) {
+	                return Response.ok().entity(Bild.get().getImage_data()).type("image/jpeg").build();
+	            } else {
+	            	throw new RuntimeException("ERROR: Image not found");
+	            }
+		 } catch (Exception e) {
+	            System.out.println("ERROR " + e.getMessage());
+	            return Response.status(404).build();
+	        }
 	}
-    
     @Transactional
     @POST
     @Consumes({"image/jpeg"})

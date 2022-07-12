@@ -1,6 +1,7 @@
 var myMap;
 var redIcon;
 var blueIcon;
+var homeIcon;
 var LocationList = [];
 var LastMarker;
 var MarkerList = [];
@@ -26,6 +27,14 @@ function initMap(){
 	});
 	blueIcon = new L.Icon({
 		iconUrl: './icon/marker-icon-blue.png',
+		shadowUrl: './icon/marker-shadow.png',
+		iconSize: [25, 41],
+		iconAnchor: [12, 41],
+		popupAnchor: [1, -34],
+		shadowSize: [41, 41]
+	});
+	homeIcon = new L.Icon({
+		iconUrl: './icon/marker-icon-home.png',
 		shadowUrl: './icon/marker-shadow.png',
 		iconSize: [25, 41],
 		iconAnchor: [12, 41],
@@ -61,7 +70,8 @@ window.onload = function() {
 	StundenplanButton.onclick = showStundenplan;
 	var KartenButton= document.getElementById("KartenButton");
 	KartenButton.onclick = showLoggedinView;
-	
+	var SuchenButton = document.getElementById("Suchen");
+	SuchenButton.onclick = sucheMitfahrgelegenheit;
 	
 	
 	
@@ -105,41 +115,28 @@ function hideRegisterView() {
 }
 	
 
-function setMarker() {
-	var street = document.querySelector("#street").value;
-	var streetNr = document.querySelector("#streetNr").value;
-	var zip = document.querySelector("#zip").value;
-	var city = document.querySelector("#city").value;
+function setMarker(data) {
+	console.log("setting marker")
+	console.log(data)
+	var street = data.street;
+	var streetNr = data.streetNumber;
+	var zip = data.zip;
+	var city = data.city;
 	var query = "streetNr=" + streetNr +"&"
 	query += "street=" + street + "&";
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
 	query += "city=" + city;
 	console.log(query);
-	const myInit = {
-		method: 'GET',
-		headers: {
-			'Accept': 'application/json',
-		},
-	};
-
-	const myRequest = new Request('locationconverter?' + query, myInit);
-
-	fetch(myRequest)
-		.then(function(response) {
-			return response.json();
-		})
-		.then(function(data) {
+	
+	fetch('app/location?' + query)
+		.then(response => response.json())
+		.then(data => {
 			console.log(data.lat);
 			console.log(data.lon);
 			let marker = new L.Marker([data.lat, data.lon]); 
             marker.addTo(myMap);
-            changeMarker(marker);
-            data.marker = marker;
-            MarkerList.push(marker)
-            LocationList.push(data);
-            showAllCoordinates(data);
-            marker.on('click',  event => showCoordinates(event,data) );
+            marker.on('click',  event => changeMarker(data));
 		})
 		.catch(function(error) {
 			console.log("EXCEPTION");
@@ -147,39 +144,52 @@ function setMarker() {
 		});
 }
 
-function showAllCoordinates(data) {
-	let div = document.querySelector("#out");
-	div.innerHTML = "<ul>";
-	for (let i = 0 ; i<LocationList.length;i++){
-		if(LocationList[i] == data) {
-			div.innerHTML = div.innerHTML+'<li value="'+MarkerList.indexOf(data.marker)+'" onclick = "handleclick(this)"> <font color="#ff0000">Lat: ' + LocationList[i].lat + ' Lon: ' + LocationList[i].lon +'</font></a></li>'
-		}
-		else{
-			div.innerHTML = div.innerHTML+'<li value="'+MarkerList.indexOf(LocationList[i]	.marker)+'" onclick = "handleclick(this)">Lat: ' + LocationList[i].lat + " Lon: " + LocationList[i].lon + "</li>"
-		}
-	}
-	div.innerHTML = div.innerHTML+"</ul>"
-}
+function setOwnMarker(data) {
+	console.log(data)
+	var street = data.street;
+	var streetNr = data.streetNumber;
+	var zip = data.zip;
+	var city = data.city;
+	var query = "streetNr=" + streetNr +"&"
+	query += "street=" + street + "&";
+	query += "postalcode=" + zip + "&";
+	query += "country=Germany" + "&";
+	query += "city=" + city;
+	console.log(query);
 	
-function handleclick(listitem){
-	var data = listitem.getAttribute('value');
-	changeMarker(MarkerList[data]);
-	showAllCoordinates( LocationList[data]); 
-}
-
-function showCoordinates(event,data){
-	console.log(event);
-	changeMarker(data.marker);
-	showAllCoordinates(data); 
+	fetch('app/location?' + query)
+		.then(response => response.json())
+		.then(data => {
+			console.log(data.lat);
+			console.log(data.lon);
+			let marker = new L.Marker([data.lat, data.lon], {icon:homeIcon});
+			console.log("llllllllll")
+			console.log(marker.options); 	
+            marker.addTo(myMap);
+            
+		})
+		.catch(function(error) {
+			console.log("EXCEPTION");
+			console.error(error);
+		});
 }
 
 function changeMarker(newMarker){
+	console.log('CHANGE MARKER  !!!!!!!!!!!!!!!!!!!!!!!!!!')
+	console.log(newMarker);
 	if(LastMarker){
 		LastMarker.setIcon(blueIcon)  
 		}
 		newMarker.setIcon(redIcon)
 		LastMarker = newMarker            
 }
+	
+function handleclick(listitem){
+	var data = listitem.getAttribute('value');
+	changeMarker(MarkerList[data]);
+}
+
+
 
 function setVisibility(elementId, visible) {
     const element = document.getElementById(elementId);
@@ -207,6 +217,7 @@ function showLoggedinView(){
 	console.log("logged in view");
 	hideRegisterView();
 	showOwnImage();
+	loadStundenplan()
 	setVisibility("aside", true);
 	setVisibility("login", false);
 	setVisibility("loggedIn", true);
@@ -463,21 +474,20 @@ else {
 
 
 function sucheMitfahrgelegenheit(){
-	showLoggedinView;
-	let Fahrart = document.querySelector('input[name="Fahrart"]:checked').value;
+	let Fahrart = ""
+	if(document.querySelector('input[name="Fahrart"]:checked')){
+	Fahrart = document.querySelector('input[name="Fahrart"]:checked').value; }
 	let Wochentag = document.getElementById("Wochentag").value;	
 	let Zeit = document.getElementById("Zeit").value;
+	let token = sessionStorage.getItem('loginToken');
+	let Umkreis = document.getElementById("Umkreis").value;
 	console.log(Fahrart);
-		let data = {
-				distance:document.getElementById("Umkreis").value,
-				token: sessionStorage.getItem('loginToken')
-			};
-	fetch('app/user', {
+	console.log("Weekday "+Wochentag);
+	fetch('app/user?token='+token+'&distance='+Umkreis, {
 		method: 'get',
 		headers: {
 			'Content-type': 'application/json'
 		},
-		body: JSON.stringify(data)
 	})
 		.then(response => {
 			if (!response.ok) {
@@ -487,23 +497,84 @@ function sucheMitfahrgelegenheit(){
 			return response.json();
 		})
 		.then(data => {
-			checkWeekTime(data);
+			checkWeekTime(data,Zeit,Wochentag,Fahrart);
 		})
 		.catch(error => {
 			console.error('Error:', error);
 		});
 }
 
-function checkWeekTime(data){
-	console.log(data);
-	showMitfahrgelegenheiten(data);
+function checkWeekTime(UserTable,time,wochentag,Fahrart){
+	let token = sessionStorage.getItem('loginToken');
+	for (let i in UserTable) {
+		fetch('app/time?userId='+UserTable[i].userId+'&token='+token+'&weekday='+wochentag, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(data => {
+		if(data.end_time>time){
+			showMitfahrgelegenheiten(data);
+		}
+		})
+		.catch(error =>{});
+}
 }
 
-function showMitfahrgelegenheiten(data){
-	document.getElementById("out").value=data
+function showMitfahrgelegenheiten(userTable){
+	console.log("SHOWING MITFAHRGELEGENHEITEN");
+	console.log(userTable);
+	let token = sessionStorage.getItem('loginToken');
+	let out=document.getElementById("out")
+	
+		let newdiv = document.createElement("div")
+		newdiv.className= "MitfahrgelegenheitenOutput"
+		out.append(newdiv);
+		fetch('app/user/'+userTable.user_id+'?token='+token, {
+		method: 'get',
+	})
+		.then(response => response.json())
+		.then(User => {
+		console.log(User);
+		fetch('app/image/user/'+User.userId+'?token=' + token)
+         .then(response => response.arrayBuffer())
+         .then(imageData => {
+            return {
+            	"imageContent": imageData
+                 };
+             })
+         .then(data => {
+		console.log('IMAGE RETRIEVED')+data
+			let image = document.createElement("img");
+			image.src = URL.createObjectURL(
+				new Blob([data.imageContent],
+				 {type: 'image/jpeg'}));
+			image.height = "100";
+			newdiv.append(image);
+			let textBox = document.createTextNode(User.firstname+' '+User.lastname);
+			let textBox2 = document.createTextNode(User.email);
+			let textBox3 = document.createTextNode(userTable.start_Time+" - "+userTable.end_time);
+			let textBox4 = document.createTextNode(User.street+' '+User.streetNumber+" "+User.zip+" "+User.city);
+			newdiv.append(textBox);
+			newdiv.append(textBox2);
+			newdiv.append(textBox3);
+			newdiv.append(textBox4);
+			setMarker(User);
+            })
+          .catch(error => console.error('Error: ', error));
+		})	
 }
+
 
 function showStundenplan(){
+	loadStundenplan()
+	setVisibility("aside", true);
+	setVisibility("login", false);
+	setVisibility("loggedIn", true);
+	setVisibility("StundenplanContainer", true);
+	setVisibility("mapid", false);
+
+}
+function loadStundenplan(){
 	let Adresse = "PLACEHOLDER"
 	let token = sessionStorage.getItem('loginToken')
 	fetch('app/access?token='+token, {
@@ -522,6 +593,7 @@ function showStundenplan(){
 		.then(response => response.json())
 		.then(data => {
 		console.log(data);
+		setOwnMarker(data);
 		Adresse= data.street+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
 		document.getElementById("MyAdress").innerHTML=Adresse;
 		})
@@ -529,12 +601,6 @@ function showStundenplan(){
 		})
 		.catch(error => console.error('Error:', error));
 		
-		
-	setVisibility("aside", true);
-	setVisibility("login", false);
-	setVisibility("loggedIn", true);
-	setVisibility("StundenplanContainer", true);
-	setVisibility("mapid", false);
 }
 
 function getStundenplanData(userId){
@@ -548,30 +614,31 @@ function getStundenplanData(userId){
 		console.log(data);
 		let Wochentag = [];
 		for (let i in data) {
+			console.log(data[i].end_time)
  			switch(data[i].weekday) {
 				case 1: {
 					document.getElementById("BeginnMontag").value=data[i].start_Time;
-					document.getElementById("EndeMontag").value=data[i].start_Time;
+					document.getElementById("EndeMontag").value=data[i].end_time;
 					break;
 					}
 				case 2: {
 					document.getElementById("BeginnDienstag").value=data[i].start_Time;
-					document.getElementById("EndeDienstag").value=data[i].start_Time;
+					document.getElementById("EndeDienstag").value=data[i].end_time;
 					break;
 					}
 				case 3: {
 					document.getElementById("BeginnMittwoch").value=data[i].start_Time;
-					document.getElementById("EndeMittwoch").value=data[i].start_Time;
+					document.getElementById("EndeMittwoch").value=data[i].end_time;
 					break;
 					}	
 				case 4: {
 					document.getElementById("BeginnDonnerstag").value=data[i].start_Time;
-					document.getElementById("EndeDonnerstag").value=data[i].start_Time;
+					document.getElementById("EndeDonnerstag").value=data[i].end_time;
 					break;
 					}
 				case 5: {
 					document.getElementById("BeginnFreitag").value=data[i].start_Time;
-					document.getElementById("EndeFreitag").value=data[i].start_Time;
+					document.getElementById("EndeFreitag").value=data[i].end_time;
 					break;
 					}
 				default: {
@@ -581,12 +648,7 @@ function getStundenplanData(userId){
 				}
 	
 			}
-	
- 			
- 			
- 			
- 			
- 			
+			
 			}
 		console.log(Wochentag);
 		})

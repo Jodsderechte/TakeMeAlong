@@ -90,7 +90,7 @@ public class UserController
 		User user = userDAO.findUser(username).get();
 		
 		List<User> users = userDAO.findUserNearBy(user.getPosition(), distance);
-		
+		users.remove(user);
 		return users.stream().map( UserDtoOut::new ).collect(Collectors.toList() );
 	}
     

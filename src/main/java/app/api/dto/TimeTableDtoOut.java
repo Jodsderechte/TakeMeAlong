@@ -38,7 +38,7 @@ public class TimeTableDtoOut implements Serializable {
 
 
 	public String getStart_Time() {
-		return start_Time.toLocalTime().getHour()+":"+start_Time.toLocalTime().getMinute();
+		return start_Time.toLocalTime().toString();
 	}
 
 
@@ -48,7 +48,7 @@ public class TimeTableDtoOut implements Serializable {
 
 
 	public String getEnd_time() {
-		return end_time.toLocalTime().getHour()+":"+end_time.toLocalTime().getMinute();
+		return end_time.toLocalTime().toString();
 	}
 
 

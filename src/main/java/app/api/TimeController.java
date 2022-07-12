@@ -40,6 +40,26 @@ public class TimeController {
 	@Inject
 	private AccessManager accessManager;
 	
+	@GET
+	public TimeTableDtoOut getTimetableforWeekDay(@QueryParam("userId") int userId, @QueryParam("weekday") int weekday, @QueryParam("token") UUID uuid) 
+	{
+    	if( accessManager.hasAccess(uuid) == false )
+		{
+			throw new RuntimeException("ERROR: Access not granted");
+		}
+    	Optional<TimeTable_Weekday> result;
+    	result = timeTableDAO.getTimeTableforUser(userId,weekday);
+    	if(result.isPresent()) {
+    		TimeTableDtoOut resultout = new TimeTableDtoOut(result.get());
+    		return resultout;
+    		}
+    	else
+    		    throw new RuntimeException("ERROR: TimeTable for Weekday not found");
+
+
+}
+	
+	
 	 @GET
 	    @Path("/{userId}")
 		public List<TimeTableDtoOut> getTimetableforWeek(@PathParam("userId") int userId, @QueryParam("token") UUID uuid) 
