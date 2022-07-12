@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,8 +21,7 @@ import com.google.gson.JsonArray;
 public class locationConverter {
 
 		@GET
-		public Response ConvertLocation(String streetNr, String street, String zip, String city, String country) {
-			System.out.println("LOCATIONCONVERTER!");
+		public Response ConvertLocation(@QueryParam("streetNr")String streetNr, @QueryParam("street")String street, @QueryParam("postalcode")String zip, @QueryParam("city")String city, @QueryParam("country")String country) {
 			String query = "street=" + streetNr + "%20" + street + "&";
 		    query += "postalcode=" + zip + "&";
 		    query += "country=" + country + "&";
@@ -29,7 +29,7 @@ public class locationConverter {
 		    		
 			String path = "/search?" + query + "&format=json";
 			String uri = "https://nominatim.openstreetmap.org" + path;
-			
+			System.out.println(uri);
 			HttpClient client = HttpClient.newHttpClient();
 		    HttpRequest httpHequest = HttpRequest.newBuilder()
 		          .uri(URI.create(uri))

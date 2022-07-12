@@ -61,6 +61,7 @@ body {
 .MitfahrgelegenheitenOutput{
 	border:1px solid black;
 	background:	#FFFFFF;
+	padding: 10px;   
 }
 
 @media screen and (min-width: 44em) { 
