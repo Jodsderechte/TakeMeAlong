@@ -22,12 +22,12 @@ public class UserDtoIn implements Serializable {
 	}
 
 	
-	public String getImageId() {
+	public String getimageId() {
 		return imageId;
 	}
 
 
-	public void setImageid(String imageId) {
+	public void setimageId(String imageId) {
 		this.imageId = imageId;
 		System.out.println(this);
 	}

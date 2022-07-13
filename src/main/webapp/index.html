@@ -23,11 +23,11 @@
 			
 		  <table>
 		 
-					<tr> <td>Vorname</td> <td > <input type = "text" id = "Vorname" name = "Vorname" placeholder="Max"> </td></tr>
-					<tr> <td>Nachname</td> <td> <input type = "text" id = "Nachname" name = "Nachname" placeholder="Mustermann"></td></tr>
+					<tr> <td>Vorname </td> <td > <input type = "text" id = "Vorname" name = "Vorname" placeholder="Max"> <span id= "VornameCheck">&#10060;</span> </td></tr>
+					<tr> <td>Nachname</td> <td> <input type = "text" id = "Nachname" name = "Nachname" placeholder="Mustermann"> <span id= "NachnameCheck">&#10060;</span></td></tr>
 					<tr> <td>Straße </td> <td> <input type = "text" id = "Straße" name = "Straße" placeholder="Hauptstraße"> Nr. <input  type = "Number" id = "NR" name = "NR" placeholder="1"> </td></tr>
-					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ" placeholder="66482"> Ort.<input type = "text" id = "Ort" name = "Ort" placeholder="Zweibrücken"></td></tr>
-					<tr> <td>E-Mail</td> <td><input type = "email" id = "EMail" name = "EMail" placeholder="MusterMail@hs-kl.de" ></td></tr>
+					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ" placeholder="66482"><span id= "VornameCheck"></span> Ort.<input type = "text" id = "Ort" name = "Ort" placeholder="Zweibrücken" list="Orte"><datalist id="Orte"></datalist> <span id= "PLZCheck">&#10060;</span></td></tr>
+					<tr> <td>E-Mail</td> <td><input type = "email" id = "EMail" name = "EMail" placeholder="MusterMail@hs-kl.de" > <span id= "MailCheck">&#10060;</span></td></tr>
 					<tr> <td>Profilbild</td> <td> <input type = "file" id = "Profilbild" name = "Profilbild" ></td></tr>
 					<tr> <td>Benutzer-ID</td> <td> <input type = "text" id = "BenutzerID" name = "BenutzerID" placeholder="TolleId" ></td></tr>
 					<tr> <td>Passwort</td> <td> <input  type = "password" id = "Passwort" name = "Passwort" placeholder="Geheim" ></td></tr>
@@ -89,14 +89,16 @@
 		<aside id=aside>
 		<div id="in">
           <h3>Eine Mitfahrgelegenheit suchen</h3>
-         		<input type="radio" id="hinfahrt" name="Fahrart" value="Hinfahrt">
-  				<label for="Hinfahrt">zur Hinfahrt</label><br>
-  				<input type="radio" id="Rückfahrt" name="Fahrart" value="Rückfahrt">
-  				<label for="Rückfahrt">zur Rückfahrt</label><br>
-  				<input type="radio" id="Beides" name="Fahrart" value="Beides">
+          <form name="myForm">
+         		<input type="radio" id="hinfahrt" onclick="fahrtArtSelect()" name="Fahrart" value="1">
+  				<label for="Hinfahrt">nur Hinfahrt</label><br>
+  				<input type="radio" id="Rückfahrt" onclick="fahrtArtSelect()" name="Fahrart" value="2">
+  				<label for="Rückfahrt">nur Rückfahrt</label><br>
+  				<input type="radio" id="Beides" onclick="fahrtArtSelect()" name="Fahrart" value="3">
   				<label for="Beides">Hin-/Rückfahrt</label> <br>
+			</form>
          		<span style="white-space: nowrap"> Umkreis in KM: <input
-					id="Umkreis" type="Number" name="Umkreis" required /> <br>
+					id="Umkreis" type="Number" name="Umkreis" required /></span> <br>
 				<label for="Wochentag">Wochentag:</label>
 					<select name="Wochentag" id="Wochentag">
 					  <option value="1">Montag</option>
@@ -105,14 +107,21 @@
 					  <option value="4">Donnerstag</option>
 					  <option value="5">Freitag</option>
 					</select> <br>
+					<div id= "TimeHin" class= "hidden">
 				<span style="white-space: nowrap"> Späteste Ankunft Hinfahrt: <input
-					id="Zeit" type="time" name="Zeit" required />
+					id="ZeitHin" type="time" name="Zeit" required /> </span>
+					</div>
+					<div id= "TimeBack" class= "hidden">
+				<span style="white-space: nowrap"> Späteste Ankunft Rückfahrt: <input
+					id="ZeitZurück" type="time" name="Zeit" required /> </span>	
+				</div>
 				<br>
 				<button class=Suchen id="Suchen"type="button" style="width: 100px;">Suchen</button>
-	
+				
     	</div>
+    	<h3>Ergebnisse</h3>
           <div id="out">
-          <h3>Ergebnisse</h3>
+          
           
           </div>
         </aside>

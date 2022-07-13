@@ -3,9 +3,12 @@ var redIcon;
 var blueIcon;
 var homeIcon;
 var LocationList = [];
+var LastDiv;
 var LastMarker;
 var MarkerList = [];
 var IsInLoginView;
+var homeMarker;
+var OrtListe = [];
 
 function initMap(){
 	myMap = L.map('mapid').setView([49.250723, 7.377122], 13);
@@ -64,6 +67,9 @@ window.onload = function() {
 	EMail.addEventListener("keyup",function() {var EMailvalue = EMail.value;checkMail(EMailvalue); },false );
 	var Postleihzahl = document.querySelector("#PLZ");
 	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
+	var Stadt = document.querySelector("#Ort");
+	Stadt.addEventListener('input', (event) => {checkStadtInfo()});
+	
 	var Suchenbutton= document.getElementById("Suchen");
 	Suchenbutton.onclick = sucheMitfahrgelegenheit;
 	var StundenplanButton= document.getElementById("StundenplanButton");
@@ -72,6 +78,9 @@ window.onload = function() {
 	KartenButton.onclick = showLoggedinView;
 	var SuchenButton = document.getElementById("Suchen");
 	SuchenButton.onclick = sucheMitfahrgelegenheit;
+	var SpeichernButton = document.getElementById("Speichern");
+	SpeichernButton.onclick= speicherStundenplan;
+	
 	
 	
 	
@@ -113,11 +122,27 @@ function hideRegisterView() {
 		document.querySelector("#Passwort").value = "";
 		document.getElementById("Profilbild").value = "";
 }
-	
 
-function setMarker(data) {
-	console.log("setting marker")
-	console.log(data)
+function fahrtArtSelect(){
+	if(document.querySelector('input[name="Fahrart"]:checked')){
+	let Fahrart = document.querySelector('input[name="Fahrart"]:checked').value; 
+	if(Fahrart == 1){
+		setVisibility("TimeHin", true);
+		setVisibility("TimeBack", false);
+		
+	}
+	else if(Fahrart == 2){
+		setVisibility("TimeHin", false);
+		setVisibility("TimeBack", true);
+	}
+	else {
+		setVisibility("TimeHin", true);
+		setVisibility("TimeBack", true);
+	}
+}	
+}
+
+function setMarker(data,newdiv) {
 	var street = data.street;
 	var streetNr = data.streetNumber;
 	var zip = data.zip;
@@ -127,16 +152,18 @@ function setMarker(data) {
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
 	query += "city=" + city;
-	console.log(query);
 	
 	fetch('app/location?' + query)
 		.then(response => response.json())
 		.then(data => {
-			console.log(data.lat);
-			console.log(data.lon);
 			let marker = new L.Marker([data.lat, data.lon]); 
             marker.addTo(myMap);
-            marker.on('click',  event => changeMarker(data));
+          	MarkerList.push(marker);
+            marker.on('click',  event => changeHighlight(marker));
+
+            newdiv.onclick = function() {
+			changeHighlight(marker);
+};
 		})
 		.catch(function(error) {
 			console.log("EXCEPTION");
@@ -160,12 +187,14 @@ function setOwnMarker(data) {
 	fetch('app/location?' + query)
 		.then(response => response.json())
 		.then(data => {
-			console.log(data.lat);
-			console.log(data.lon);
+			console.log("locationdata");
+			console.log(data);
+		
 			let marker = new L.Marker([data.lat, data.lon], {icon:homeIcon});
 			console.log("llllllllll")
 			console.log(marker.options); 	
             marker.addTo(myMap);
+            homeMarker = marker
             
 		})
 		.catch(function(error) {
@@ -174,19 +203,49 @@ function setOwnMarker(data) {
 		});
 }
 
+function changeHighlight(data){
+	if(!LastMarker || LastMarker!= data){
+	let thisdiv = LocationList[MarkerList.indexOf(data)];
+	thisdiv.classList.remove("MitfahrgelegenheitenOutput");
+	thisdiv.classList.add("highlighted");
+	if(LastDiv){
+    LastDiv.classList.remove("highlighted");
+    LastDiv.classList.add("MitfahrgelegenheitenOutput");
+    }
+    LastDiv = thisdiv;
+	changeMarker(data);
+	}
+}
+
 function changeMarker(newMarker){
-	console.log('CHANGE MARKER  !!!!!!!!!!!!!!!!!!!!!!!!!!')
-	console.log(newMarker);
 	if(LastMarker){
 		LastMarker.setIcon(blueIcon)  
 		}
 		newMarker.setIcon(redIcon)
 		LastMarker = newMarker            
 }
+
+function removeMarker(marker){
+	myMap.removeLayer(marker);
+}
+
+function removeAllMarkers(){
+	if(MarkerList){
+	for(let marker in MarkerList){
+	removeMarker(MarkerList[marker]);
+	}
+	MarkerList = [];
+}}
+function removeHomeMarker(){
+	if(homeMarker){
+	removeMarker(homeMarker);
+	homeMarker= "";
+	}
+}
 	
-function handleclick(listitem){
-	var data = listitem.getAttribute('value');
-	changeMarker(MarkerList[data]);
+function handleclick(thisdiv){
+	let thismarker = MarkerList[LocationList.indexOf(thisdiv)];
+	changeHighlight(thismarker);	
 }
 
 
@@ -211,6 +270,10 @@ function showLoginView(){
 	if(myMap== null){
 		initMap();
 	}
+	removeAllMarkers();
+	removeHomeMarker();
+	clearMitfahrgelegenheiten()
+	
 }
 
 function showLoggedinView(){
@@ -283,7 +346,7 @@ console.log("register")
 			streetNumber: document.querySelector("#NR").value,
 			zip: document.querySelector("#PLZ").value,
 			city: document.querySelector("#Ort").value,
-			imageId: 1,
+			imageId: "1",
 		};
 		if (file) {
 			document.getElementById("Profilbild").value="";
@@ -403,12 +466,12 @@ function checkName(Name,StringToPrint){
 	var re3 = new RegExp("[0-9§,$,%,&,!,?.]")
 	var check3 = re3.test(Name)
 	var check2 = re2.test(Name)
-	var check = re.test(Name);
-	if(check|check2|check3) {
-		document.querySelector("#registerError").innerHTML = StringToPrint+" ist nicht korrekt!";
+	var check = re.test(Name);;
+	if(Name.length==0|check|check2|check3) {
+		document.getElementById(StringToPrint+"Check").innerHTML = "&#10060;";
 	}
-	else if(document.querySelector("#registerError").innerHTML == StringToPrint+" ist nicht korrekt!") {
-	 	document.querySelector("#registerError").innerHTML = "";
+	else {
+	 	document.getElementById(StringToPrint+"Check").innerHTML = "&#10004";
 	}
 }
 function checkMail(Mail){
@@ -418,12 +481,11 @@ function checkMail(Mail){
 	var check = re.test(Mail);
 	console.log("Mailcheck")
 	if(check|check2) {
-		if(document.querySelector("#registerError").innerHTML == "E-Mail ist nicht korrekt!") {
-	 	document.querySelector("#registerError").innerHTML = "";
-	}
+		document.getElementById("MailCheck").innerHTML = "&#10004";
+	
 	}
 	else {
-	 	document.querySelector("#registerError").innerHTML = "E-Mail ist nicht korrekt!";
+	 	document.getElementById("MailCheck").innerHTML = "&#10060;"
 	}
 }
 function checkPLZ(PLZ){
@@ -432,11 +494,11 @@ function checkPLZ(PLZ){
 	client.open("GET", "http://api.zippopotam.us/de/"+PLZ, true);
 	client.onreadystatechange = function() {
 	if(client.readyState == 4) {
-		if(client.responseText != "{}"&document.querySelector("#registerError").innerHTML == "PLZ ist nicht korrekt!"){
-	 		document.querySelector("#registerError").innerHTML = "";
+		if(client.responseText != "{}"){
+	 		document.getElementById("PLZCheck").innerHTML = "&#10004";
 		}
 		else {
-			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+			document.getElementById("PLZCheck").innerHTML = "&#10060;";
 		}
 	};
 };
@@ -444,43 +506,86 @@ function checkPLZ(PLZ){
 client.send();
 }
 else {
-			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+			document.getElementById("PLZCheck").innerHTML = "&#10060;";
 		}
 }
 
 function checkEscherPLZ(PLZ){
-	if(PLZ.length==5){
+	if(PLZ.length>=3){
 	var client = new XMLHttpRequest();
 	client.open("GET", "http://escher.informatik.hs-kl.de:8080/PlzService/ort?plz="+PLZ, true);
 	client.setRequestHeader("Accept","application/json");
 	client.onreadystatechange = function() {
 	if(client.readyState == 4) {
-		console.log(client.responseText)
-		if(client.responseText != "{}"&document.querySelector("#registerError").innerHTML == "PLZ ist nicht korrekt!"){
-	 		document.querySelector("#registerError").innerHTML = "";
+		let data = JSON.parse(client.responseText)
+		if(client.responseText != "{}"){
+		let Orte = document.getElementById('Orte');
+			let Städte = []
+			for(let i in data){
+				if(Städte.includes(data[i])==false)
+				Städte.push(data[i]);
+			}
+			OrtListe = [];
+			if(Städte.length==1){
+				document.getElementById("Ort").value=Städte[0].ort;
+				document.getElementById("PLZCheck").innerHTML = "&#10004";
+			}
+			else{
+			for(let k in Städte){
+				let option = document.createElement("option");
+				option.value = Städte[k].ort;
+				option.text = Städte[k].ort;
+				Orte.append(option);
+				OrtListe.push(Städte[k]);
+			}	
+			}
 		}
 		else {
-			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+			document.getElementById("PLZCheck").innerHTML = "&#10060;";
 		}
 	};
 };
 
+
 client.send();
 }
 else {
-			document.querySelector("#registerError").innerHTML = "PLZ ist nicht korrekt!";
+			document.getElementById("PLZCheck").innerHTML = "&#10060;";
 		}
 }
 
+function checkStadtInfo(){
+	console.log("Checking stadtinfo")
+	let Stadt = document.getElementById("Ort").value; 
+	for(let i in OrtListe){
+		if(Stadt==OrtListe[i].ort){
+			document.getElementById("PLZ").value = OrtListe[i].plz;
+			break;
+		}	
+	}
+}
+function clearMitfahrgelegenheiten(){
+	let out=document.getElementById("out");
+	out.innerHTML="";
+}
 
 function sucheMitfahrgelegenheit(){
+	removeAllMarkers();
+	clearMitfahrgelegenheiten();
 	let Fahrart = ""
 	if(document.querySelector('input[name="Fahrart"]:checked')){
-	Fahrart = document.querySelector('input[name="Fahrart"]:checked').value; }
+	Fahrart = document.querySelector('input[name="Fahrart"]:checked').value; 
+	document.querySelector('input[name="Fahrart"]:checked').value = ""
+	}
 	let Wochentag = document.getElementById("Wochentag").value;	
-	let Zeit = document.getElementById("Zeit").value;
+	document.getElementById("Wochentag").value='';
+	let Zeithin = document.getElementById("ZeitHin").value;
+	document.getElementById("ZeitHin").value=''
+	let ZeitZurück = document.getElementById("ZeitZurück").value;
+	document.getElementById("ZeitHin").value=''
 	let token = sessionStorage.getItem('loginToken');
 	let Umkreis = document.getElementById("Umkreis").value;
+	document.getElementById("Umkreis").value='';
 	console.log(Fahrart);
 	console.log("Weekday "+Wochentag);
 	fetch('app/user?token='+token+'&distance='+Umkreis, {
@@ -497,14 +602,14 @@ function sucheMitfahrgelegenheit(){
 			return response.json();
 		})
 		.then(data => {
-			checkWeekTime(data,Zeit,Wochentag,Fahrart);
+			checkWeekTime(data,Zeithin,ZeitZurück,Wochentag,Fahrart);
 		})
 		.catch(error => {
 			console.error('Error:', error);
 		});
 }
 
-function checkWeekTime(UserTable,time,wochentag,Fahrart){
+function checkWeekTime(UserTable,Timehin,Timeback,wochentag,Fahrart){
 	let token = sessionStorage.getItem('loginToken');
 	for (let i in UserTable) {
 		fetch('app/time?userId='+UserTable[i].userId+'&token='+token+'&weekday='+wochentag, {
@@ -512,19 +617,75 @@ function checkWeekTime(UserTable,time,wochentag,Fahrart){
 	})
 		.then(response => response.json())
 		.then(data => {
-		if(data.end_time>time){
-			showMitfahrgelegenheiten(data);
-		}
+			
+		if(Fahrart==1) {
+			console.log("FAHRART 1");	
+			if(data.start_Time<=Timehin){
+				showMitfahrgelegenheiten(data);
+				}
+			}
+		else if(Fahrart==2) {
+			if(data.end_time>=Timeback){
+				showMitfahrgelegenheiten(data);
+				console.log("FAHRART 2");
+				}
+			}	
+		else { 
+			if(data.end_time>=Timeback&&data.start_Time<=Timehin){
+				console.log("FAHRART 3");
+				showMitfahrgelegenheiten(data);
+				}
+			}				
 		})
 		.catch(error =>{});
 }
+}
+function speicherStundenplan(){
+	let BeginnMontag= document.getElementById("BeginnMontag").value;
+	let EndeMontag= document.getElementById("EndeMontag").value;
+	let BeginnDienstag = document.getElementById("BeginnDienstag").value;
+	let EndeDienstag = document.getElementById("EndeDienstag").value;
+	let BeginnMittwoch = document.getElementById("BeginnMittwoch").value;
+	let EndeMittwoch = document.getElementById("EndeMittwoch").value;
+	let BeginnDonnerstag = document.getElementById("BeginnDonnerstag").value;
+	let EndeDonnerstag = document.getElementById("EndeDonnerstag").value;
+	let BeginnFreitag = document.getElementById("BeginnFreitag").value;
+	let EndeFreitag = document.getElementById("EndeFreitag").value;
+	
+	if(BeginnMontag&&EndeMontag){
+		speicherWochentag(1,BeginnMontag,EndeMontag);		
+	}
+	if(BeginnDienstag&&EndeDienstag){
+		speicherWochentag(2,BeginnDienstag,EndeDienstag);		
+	}
+	if(BeginnMittwoch&&EndeMittwoch){
+		speicherWochentag(3,BeginnMittwoch,EndeMittwoch);		
+	}
+	if(BeginnDonnerstag&&EndeDonnerstag){
+		speicherWochentag(4,BeginnDonnerstag,EndeDonnerstag);		
+	}
+	if(BeginnFreitag&&EndeFreitag){
+		speicherWochentag(5,BeginnFreitag,EndeFreitag);		
+	}
+	}
+function speicherWochentag(wochentag,start_time,end_time){
+	let token = sessionStorage.getItem('loginToken');
+	console.log("speicherwochentag"+wochentag+' '+start_time+' '+end_time)
+	
+	fetch('app/time?end_time='+end_time+'&start_time='+start_time+'&token='+token+'&weekday='+wochentag, {
+		method: 'post',
+	})
+	.then(response=>{
+		console.log(response);
+	})
+	.catch(error =>{console.log(error)});
 }
 
 function showMitfahrgelegenheiten(userTable){
 	console.log("SHOWING MITFAHRGELEGENHEITEN");
 	console.log(userTable);
 	let token = sessionStorage.getItem('loginToken');
-	let out=document.getElementById("out")
+	let out=document.getElementById("out");
 	
 		let newdiv = document.createElement("div")
 		newdiv.className= "MitfahrgelegenheitenOutput"
@@ -558,7 +719,8 @@ function showMitfahrgelegenheiten(userTable){
 			newdiv.append(textBox2);
 			newdiv.append(textBox3);
 			newdiv.append(textBox4);
-			setMarker(User);
+			LocationList.push(newdiv);
+			setMarker(User,newdiv);
             })
           .catch(error => console.error('Error: ', error));
 		})	

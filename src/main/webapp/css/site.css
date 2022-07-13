@@ -58,11 +58,21 @@ body {
 	height: 100%; 	
 } 
 
+#out{
+	height: 60%;
+	overflow-y: scroll;	
+}
 .MitfahrgelegenheitenOutput{
 	border:1px solid black;
-	background:	#FFFFFF;
-	padding: 10px;   
+	background:	#FFFFFF;  
+	margin: 0px 10px 10px 10px;
 }
+
+.highlighted {
+    background: #808080;
+    border:1px solid black;
+    margin: 0px 10px 10px 10px;
+}   
 
 @media screen and (min-width: 44em) { 
   .mainContainer { 
@@ -97,6 +107,7 @@ aside {
 	border-bottom: 2px solid #fff;
     background:#F3E2A9;
     grid-area: aside;
+    height: 650px;
 }
 
 span + span {
@@ -142,12 +153,13 @@ table{
 	display: none;
 	top: 30%;
 	right: calc(70% - 470px);
-	width: 370px;
-	height: 255px;
+	width: 380px;
+	height: 275px;
 	border-bottom: 2px solid #fff;
     background: white;
     border: 2px solid black;
     }
+    
     
 .hidden {
     display: none;
