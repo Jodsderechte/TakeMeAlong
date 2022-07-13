@@ -1,6 +1,9 @@
 package app.api;
 
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -81,13 +84,25 @@ public class TimeController {
 	 
 	 @POST
 		@Transactional
-		public void addTimeTableforWeekday(@QueryParam("token") UUID uuid, TimeTableDto TimeTable) 
+		public void addTimeTableforWeekday(@QueryParam("token") UUID uuid,@QueryParam("weekday") int weekday, @QueryParam("start_time") String start_time, @QueryParam("end_time") String end_time) 
 		{
+		 		System.out.println("addTimeTable");
 		 		if( accessManager.hasAccess(uuid) == false )
 		 			{
 		 				throw new RuntimeException("ERROR: Access not granted");
 		 			}
-	    timeTableDAO.addTimeTable(TimeTable.getUser_id(), TimeTable.getWeekday(), TimeTable.getStart_Time(), TimeTable.getEnd_time());
+		 		Optional<User> user =accessManager.getUser(uuid);
+				User Nutzer = user.get();
+				DateFormat formatter = new SimpleDateFormat("HH:mm");
+				
+				try {
+					java.sql.Time startTime = new java.sql.Time(formatter.parse(start_time).getTime());
+					java.sql.Time endTime = new java.sql.Time(formatter.parse(end_time).getTime());
+					timeTableDAO.addTimeTable(Nutzer.getUserId(), weekday,startTime, endTime);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			
 			
 

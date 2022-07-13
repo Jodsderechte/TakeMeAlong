@@ -99,7 +99,7 @@ public class UserController
 	public Token register(UserDtoIn user) {
 		System.out.println(user);
 		userDAO.createUser(user.getUsername(), user.getPassword(), user.getFirstname(), 
-				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity(), Integer.parseInt(user.getImageId()));
+				user.getLastname(), user.getEmail(), user.getStreet(), user.getStreetNumber(), user.getZip(), user.getCity(), Integer.parseInt(user.getimageId()));
 
 		UUID uuid = accessManager.register(user.getUsername(), user.getPassword());
 		
