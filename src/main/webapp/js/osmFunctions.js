@@ -83,7 +83,6 @@ window.onload = function() {
 	
 	
 	
-	
 	let token = sessionStorage.getItem('loginToken');
 	
 	
@@ -172,7 +171,6 @@ function setMarker(data,newdiv) {
 }
 
 function setOwnMarker(data) {
-	console.log(data)
 	var street = data.street;
 	var streetNr = data.streetNumber;
 	var zip = data.zip;
@@ -182,18 +180,12 @@ function setOwnMarker(data) {
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
 	query += "city=" + city;
-	console.log(query);
 	
 	fetch('app/location?' + query)
 		.then(response => response.json())
 		.then(data => {
-			console.log("locationdata");
-			console.log(data);
-		
 			let marker = new L.Marker([data.lat, data.lon], {icon:homeIcon});
-			console.log("llllllllll")
-			console.log(marker.options); 	
-            marker.addTo(myMap);
+			 marker.addTo(myMap);
             homeMarker = marker
             
 		})
@@ -335,7 +327,6 @@ function logout(){
 function register() {
 console.log("register")
 	let file = document.getElementById("Profilbild").files[0];
-	console.log(file)
 	let data = {
 			username: document.querySelector("#BenutzerID").value,
 			password: document.querySelector("#Passwort").value,
@@ -670,8 +661,7 @@ function speicherStundenplan(){
 	}
 function speicherWochentag(wochentag,start_time,end_time){
 	let token = sessionStorage.getItem('loginToken');
-	console.log("speicherwochentag"+wochentag+' '+start_time+' '+end_time)
-	
+
 	fetch('app/time?end_time='+end_time+'&start_time='+start_time+'&token='+token+'&weekday='+wochentag, {
 		method: 'post',
 	})
@@ -683,7 +673,6 @@ function speicherWochentag(wochentag,start_time,end_time){
 
 function showMitfahrgelegenheiten(userTable){
 	console.log("SHOWING MITFAHRGELEGENHEITEN");
-	console.log(userTable);
 	let token = sessionStorage.getItem('loginToken');
 	let out=document.getElementById("out");
 	
@@ -695,7 +684,6 @@ function showMitfahrgelegenheiten(userTable){
 	})
 		.then(response => response.json())
 		.then(User => {
-		console.log(User);
 		fetch('app/image/user/'+User.userId+'?token=' + token)
          .then(response => response.arrayBuffer())
          .then(imageData => {
@@ -747,14 +735,12 @@ function loadStundenplan(){
 	})
 		.then(response => response.json())
 		.then(data => {
-		console.log('userid: '+data);
 		getStundenplanData(data);
 		fetch('app/user/'+data+'?token='+token, {
 		method: 'get',
 	})
 		.then(response => response.json())
 		.then(data => {
-		console.log(data);
 		setOwnMarker(data);
 		Adresse= data.street+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
 		document.getElementById("MyAdress").innerHTML=Adresse;
@@ -767,17 +753,15 @@ function loadStundenplan(){
 
 function getStundenplanData(userId){
 	let token = sessionStorage.getItem('loginToken')
-	console.log("getStundenplanDat" +userId);
+	console.log("getStundenplanData " +userId);
 	fetch('app/time/'+userId+'?token='+token, {
 		method: 'get',
 	})
 		.then(response => response.json())
 		.then(data => {
-		console.log(data);
 		let Wochentag = [];
 		for (let i in data) {
-			console.log(data[i].end_time)
- 			switch(data[i].weekday) {
+			switch(data[i].weekday) {
 				case 1: {
 					document.getElementById("BeginnMontag").value=data[i].start_Time;
 					document.getElementById("EndeMontag").value=data[i].end_time;
@@ -812,7 +796,6 @@ function getStundenplanData(userId){
 			}
 			
 			}
-		console.log(Wochentag);
 		})
 		.catch(error => console.error('Error:', error));
 
@@ -823,15 +806,11 @@ function getImage(userID){
 	console.log("getImage");
 	if(userID){
 	let token = sessionStorage.getItem('loginToken')
-	console.log(userID)
-	console.log(token)
 	fetch('/app/image/'+userID+'/?token='+token)
 		.then(response  => {
-			console.log(response);
-		})
+			})
 		.then(data => {
-			console.log(data);
-		showImage(data)
+				showImage(data)
 		})
 		.catch(error => console.error('Error:', error));
 		}
@@ -849,7 +828,6 @@ function showOwnImage(){
                  };
              })
          .then(data => {
-			console.log(data);
 			let div = document.getElementById("ProfileImage");
 			div.textContent = '';
 			let image = document.createElement("img");
