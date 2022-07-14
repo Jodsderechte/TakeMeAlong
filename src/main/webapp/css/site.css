@@ -24,9 +24,8 @@ body {
  ; 
 }
 
-.loggedIn{
-	grid-template-rows:  min-content 1fr; 
-    grid-template-columns: 1fr min-content;
+#loggedInAnordnung{
+	display: grid; 
     grid-template-areas:  
       "WebsiteName		logout		Stundenplan		Karte		logoutError		ProfileImage" 
     ;	
@@ -36,17 +35,18 @@ body {
 	grid-area: WebsiteName;
 }
 
-.logoutButton{
+#logoutButton{
 	grid-area: logout;
+  	padding: 15px 32px;
 }
 
-.StundenplanButton{
+#StundenplanButton{
 	grid-area: Stundenplan;
 }
-.KartenButton{
+#KartenButton{
 	grid-area: Karte;
 }
-.logoutError{
+#logoutError{
 	grid-area: logoutError;
 }
 
@@ -59,31 +59,14 @@ body {
 } 
 
 #out{
-	height: 60%;
+	height: 55%;
 	overflow-y: scroll;	
 }
 
 #in{
 	height: 33%;
-	grid-template-rows:  min-content 1fr; 
-    grid-template-columns: 1fr min-content;
-    grid-template-areas:  
-      "MitFahrTitel" 
-      "FahrartForm" 
-      "Umkreis"
-      "Wochentag"
-      "Timehin"
-      "Timeback"
-    ; 
-    background: #d3d3d3;
 }
 
-#Suchen{
-	 position: absolute;
-  	top: 50%;
-  	-ms-transform: translateY(-50%);
- 	 transform: translateY(-50%);
-}
 
 #MitfahrgelegenheitTitel{
 	grid-area: MitFahrTitel;
@@ -95,6 +78,10 @@ body {
 }
 #Umkreis2{
 	grid-area: Umkreis;
+	margin: 0px 10px 10px 10px;
+}
+#Wochentag{
+	grid-area: WochentagLabel;
 	margin: 0px 10px 10px 10px;
 }
 #Wochentag2{
@@ -114,12 +101,41 @@ body {
 	border:1px solid black;
 	background:	#FFFFFF;  
 	margin: 0px 10px 10px 10px;
+	display: grid; 
+    grid-template-areas:  
+      "BildBox	UserBox" 
+      "BildBox	MailBox" 
+      "BildBox	TimeBox" 
+      "BildBox	AdressBox" 
+    ;
 }
 
+.BildBox{
+	grid-area: BildBox;
+}
+.userBox{
+	grid-area: UserBox;
+}
+.eMailBox{
+	grid-area: MailBox;
+}
+.TimeBox{
+	grid-area: TimeBox;
+}
+.AdressBox{
+	grid-area: AdressBox;
+}
 .highlighted {
     background: #808080;
     border:1px solid black;
     margin: 0px 10px 10px 10px;
+    display: grid; 
+    grid-template-areas:  
+      "BildBox	UserBox" 
+      "BildBox	MailBox" 
+      "BildBox	TimeBox" 
+      "BildBox	AdressBox" 
+    ;
 }   
 
 @media screen and (min-width: 44em) { 

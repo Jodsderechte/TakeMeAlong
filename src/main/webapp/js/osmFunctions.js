@@ -705,15 +705,27 @@ function showMitfahrgelegenheiten(userTable){
 				new Blob([data.imageContent],
 				 {type: 'image/jpeg'}));
 			image.height = "100";
+			image.width = "100"
+			image.classList.add('BildBox');
 			newdiv.append(image);
-			let textBox = document.createTextNode(User.firstname+' '+User.lastname);
-			let textBox2 = document.createTextNode(User.email);
-			let textBox3 = document.createTextNode(userTable.start_Time+" - "+userTable.end_time);
-			let textBox4 = document.createTextNode(User.street+' '+User.streetNumber+" "+User.zip+" "+User.city);
-			newdiv.append(textBox);
-			newdiv.append(textBox2);
-			newdiv.append(textBox3);
-			newdiv.append(textBox4);
+			
+			
+			let userBox = document.createElement("span");
+			userBox.classList.add("userBox");
+			userBox.innerHTML = User.firstname+' '+User.lastname;
+			let MailBox = document.createElement("span");
+			MailBox.classList.add("eMailBox");
+			MailBox.innerHTML = User.email;
+			let TimeBox = document.createElement("span");
+			TimeBox.classList.add("TimeBox");
+			TimeBox.innerHTML = userTable.start_Time+" - "+userTable.end_time;
+			let AdressBox = document.createElement("span");
+			AdressBox.classList.add("AdressBox");
+			AdressBox.innerHTML = User.street+' '+User.streetNumber+" "+User.zip+" "+User.city;
+			newdiv.append(userBox);
+			newdiv.append(MailBox);
+			newdiv.append(TimeBox);
+			newdiv.append(AdressBox);
 			document.getElementById("suchenError").innerHTML = '';
 			setMarker(User,newdiv);
             })
