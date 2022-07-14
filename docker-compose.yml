@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+    db:
+        # TODO: grant swtp access in conf script
+        image: swtp_image
+        ports:
+            - "3306:3306"
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+            #MYSQL_RANDOM_ROOT_PASSWORD: "true"
+            MYSQL_DATABASE: "swtp"
+            #MYSQL_USER: "swtp"
+            #MYSQL_PASSWORD: "swtp"
+        volumes:
+            - ./database/conf/:/etc/mysql/conf.d
+            - ./database/initdb/:/docker-entrypoint-initdb.d/
+
+    liberty:
+        depends_on:
+            - db
+        build: .
+        ports:
+            - "9084:9084"
+            - "9443:9443"
+        environment:
+            DB_HOSTNAME: "db"
+
+        #volumes:
+        #    - ./src/main/liberty/config/:/config/
+        #    - ./target/takeMeAlong.war:/config/apps/
+        restart: unless-stopped
