@@ -12,6 +12,7 @@ services:
             MYSQL_DATABASE: "swtp"
             #MYSQL_USER: "swtp"
             #MYSQL_PASSWORD: "swtp"
+	project.name = "takeMeAlong"
         volumes:
             - ./database/conf/:/etc/mysql/conf.d
             - ./database/initdb/:/docker-entrypoint-initdb.d/
