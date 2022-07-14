@@ -57,19 +57,19 @@ window.onload = function() {
 	var logoutButton = document.getElementById("logoutButton");
 	logoutButton.onclick = logout;
 	var Password = document.querySelector("#Passwort");
-	Password.addEventListener("keyup",function() {var passwd = Password.value;checkPassword( passwd ); },false );
+	Password.addEventListener("keyup",function() {var passwd = Password.value.escape();checkPassword( passwd ); },false );
 	var VorName = document.querySelector("#Vorname");
-	VorName.addEventListener("keyup",function() {var Vname = VorName.value;checkName( Vname,"Vorname" ); },false );
+	VorName.addEventListener("keyup",function() {var Vname = VorName.value.escape();checkName( Vname,"Vorname" ); },false );
 	var NachName = document.querySelector("#Nachname");
-	NachName.addEventListener("keyup",function() {var Nname = NachName.value;checkName( Nname,"Nachname" ); },false );
+	NachName.addEventListener("keyup",function() {var Nname = NachName.value.escape();checkName( Nname,"Nachname" ); },false );
 	var EMail = document.querySelector("#EMail");
-	EMail.addEventListener("keyup",function() {var EMailvalue = EMail.value;checkMail(EMailvalue); },false );
+	EMail.addEventListener("keyup",function() {var EMailvalue = EMail.value.escape();checkMail(EMailvalue); },false );
 	var Postleihzahl = document.querySelector("#PLZ");
-	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value;checkEscherPLZ(PLZ); },false );
+	Postleihzahl.addEventListener("keyup",function() {var PLZ = Postleihzahl.value.escape();checkEscherPLZ(PLZ); },false );
 	var Stadt = document.querySelector("#Ort");
 	Stadt.addEventListener('input', (event) => {checkStadtInfo()});
 	var NutzerName = document.querySelector('#BenutzerID');
-	NutzerName.addEventListener('input',(event) => {checkUserName(NutzerName.value)});
+	NutzerName.addEventListener('input',(event) => {checkUserName(NutzerName.value.escape())});
 	
 	
 	var Suchenbutton= document.getElementById("Suchen");
@@ -144,16 +144,16 @@ function fahrtArtSelect(){
 }
 
 function setMarker(data,newdiv) {
-	var street = data.street;
-	var streetNr = data.streetNumber;
-	var zip = data.zip;
-	var city = data.city;
-	var query = "streetNr=" + streetNr +"&"
+	let street = data.street;
+	let streetNr = data.streetNumber;
+	let zip = data.zip;
+	let city = data.city;
+	let token = sessionStorage.getItem('loginToken');
+	let query = "streetNr=" + streetNr +"&"
 	query += "street=" + street + "&";
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
-	query += "city=" + city;
-	
+	query += "city=" + city+"&token="+token;
 	fetch('app/location?' + query)
 		.then(response => response.json())
 		.then(data => {
@@ -176,15 +176,16 @@ function setMarker(data,newdiv) {
 }
 
 function setOwnMarker(data) {
-	var street = data.street;
-	var streetNr = data.streetNumber;
-	var zip = data.zip;
-	var city = data.city;
-	var query = "streetNr=" + streetNr +"&"
+	let token = sessionStorage.getItem('loginToken');
+	let street = data.street;	
+	let streetNr = data.streetNumber;
+	let zip = data.zip;
+	let city = data.city;
+	let query = "streetNr=" + streetNr +"&"
 	query += "street=" + street + "&";
 	query += "postalcode=" + zip + "&";
 	query += "country=Germany" + "&";
-	query += "city=" + city;
+	query += "city=" + city+"&token="+token;
 	
 	fetch('app/location?' + query)
 		.then(response => response.json())
@@ -268,9 +269,9 @@ function showLoginView(){
 }
 
 function showLoggedinView(){
-	console.log("logged in view");
 	hideRegisterView();
 	showOwnImage();
+	hideStundenplan()
 	loadStundenplan()
 	setVisibility("aside", true);
 	setVisibility("login", false);
@@ -281,8 +282,8 @@ function showLoggedinView(){
 
 function login(){
 	let data = {
-		username: document.querySelector("#userNameLogin").value,
-		password: document.querySelector("#passwordLogin").value
+		username: document.querySelector("#userNameLogin").value.escape(),
+		password: document.querySelector("#passwordLogin").value.escape()
 	};
 	fetch('app/access', {
 		method: 'post',
@@ -327,41 +328,20 @@ function register() {
 console.log("register")
 	let file = document.getElementById("Profilbild").files[0];
 	let data = {
-			username: document.querySelector("#BenutzerID").value,
-			password: document.querySelector("#Passwort").value,
-			firstname: document.querySelector("#Vorname").value,
-			lastname: document.querySelector("#Nachname").value,
-			email: document.querySelector("#EMail").value,
-			street: document.querySelector("#Straße").value,
-			streetNumber: document.querySelector("#NR").value,
-			zip: document.querySelector("#PLZ").value,
-			city: document.querySelector("#Ort").value,
+			username: document.querySelector("#BenutzerID").value.escape(),
+			password: document.querySelector("#Passwort").value.escape(),
+			firstname: document.querySelector("#Vorname").value.escape(),
+			lastname: document.querySelector("#Nachname").value.escape(),
+			email: document.querySelector("#EMail").value.escape(),
+			street: document.querySelector("#Straße").value.escape(),
+			streetNumber: document.querySelector("#NR").value.escape(),
+			zip: document.querySelector("#PLZ").value.escape(),
+			city: document.querySelector("#Ort").value.escape(),
 			imageId: "1",
 		};
 		if (file) {
 			document.getElementById("Profilbild").value="";
-	
-		fetch('app/image', {
-		method: 'post',
-		headers: {
-			'Content-type': 'image/jpeg'
-		}, body: file
-	}) .then(response => {
-  		 if (!response.ok) {
-   		 	console.error('Es ist ein Fehler aufgetreten!');
-        	 throw Error(response.statusText);
-          }
-         return response.json();
-         })
-       .then(imageData => {
-			 // add imageId to the user object
-			 console.log('Image created: '+imageData)
- 			 Object.assign(data, {imageId: imageData});
-			 registerUser(data);
-         })
-  		.catch(error => {
-          console.error('Error:', error);
-		});
+			registerUserWithImage(data,file);
 		}
 		else{
 		registerUser(data);	
@@ -394,6 +374,53 @@ function registerUser(data) {
 			}
 			console.error('Error:', error);
 		});
+}
+
+function registerUserWithImage(data,file){
+	
+	console.log(JSON.stringify(data))
+	fetch('app/user', {
+		method: 'post',
+		headers: {
+			'Content-type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	})
+		.then(response => {
+			if (!response.ok) {
+				document.querySelector("#registerError").innerHTML = "Ein Fehler ist aufgetreten!";
+				throw Error(response.statusText);
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log("Login Token " + data);
+			sessionStorage.setItem('loginToken', data.token);
+			fetch('app/image?token='+data.token, {
+					method: 'post',
+					headers: {
+						'Content-type': 'image/jpeg'
+					}, body: file
+				}) .then(response => {
+			  		 if (!response.ok) {
+			   		 	console.error('Fehler bei der Bild Registrierung!');
+			        	 throw Error(response.statusText);
+			          }  
+			          showLoggedinView();
+			         })
+			  		.catch(error => {
+			          console.error('Error:', error);
+					});
+		})
+		.catch(error => {
+			if(sessionStorage.getItem('loginToken')!=null){
+			sessionStorage.removeItem('loginToken');	
+			}
+			console.error('Error:', error);
+		});
+	
+	
+	
 }
 	
 	
@@ -712,16 +739,16 @@ function showMitfahrgelegenheiten(userTable){
 			
 			let userBox = document.createElement("span");
 			userBox.classList.add("userBox");
-			userBox.innerHTML = User.firstname+' '+User.lastname;
+			userBox.innerHTML = User.firstname.escape()+' '+User.lastname.escape();
 			let MailBox = document.createElement("span");
 			MailBox.classList.add("eMailBox");
-			MailBox.innerHTML = User.email;
+			MailBox.innerHTML = User.email.escape();
 			let TimeBox = document.createElement("span");
 			TimeBox.classList.add("TimeBox");
 			TimeBox.innerHTML = userTable.start_Time+" - "+userTable.end_time;
 			let AdressBox = document.createElement("span");
 			AdressBox.classList.add("AdressBox");
-			AdressBox.innerHTML = User.street+' '+User.streetNumber+" "+User.zip+" "+User.city;
+			AdressBox.innerHTML = User.street.escape()+' '+User.streetNumber+" "+User.zip+" "+User.city.escape();
 			newdiv.append(userBox);
 			newdiv.append(MailBox);
 			newdiv.append(TimeBox);
@@ -743,6 +770,20 @@ function showStundenplan(){
 	setVisibility("mapid", false);
 
 }
+
+function hideStundenplan(){
+	document.getElementById("BeginnMontag").value='';
+	document.getElementById("EndeMontag").value='';
+	document.getElementById("BeginnDienstag").value='';
+	document.getElementById("EndeDienstag").value='';
+	document.getElementById("BeginnMittwoch").value='';
+	document.getElementById("EndeMittwoch").value='';
+	document.getElementById("BeginnDonnerstag").value='';
+	document.getElementById("EndeDonnerstag").value='';
+	document.getElementById("BeginnFreitag").value='';
+	document.getElementById("EndeFreitag").value='';
+			
+}
 function loadStundenplan(){
 	let Adresse = "PLACEHOLDER"
 	let token = sessionStorage.getItem('loginToken')
@@ -761,7 +802,7 @@ function loadStundenplan(){
 		.then(response => response.json())
 		.then(data => {
 		setOwnMarker(data);
-		Adresse= data.street+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
+		Adresse= data.street.escape()+' '+data.streetNumber+ ' '+data.zip+ ' ' +data.city
 		document.getElementById("MyAdress").innerHTML=Adresse;
 		})
 		.catch(error => console.error('Error:', error));
@@ -858,4 +899,15 @@ function showOwnImage(){
           .catch(error => console.error('Error: ', error));
 	
 }
+
+String.prototype.escape = function() {
+    var tagsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
+    };
+    return this.replace(/[&<>]/g, function(tag) {
+        return tagsToReplace[tag] || tag;
+    });
+};
 	

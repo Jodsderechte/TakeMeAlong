@@ -126,19 +126,29 @@ public class ImageController {
     @POST
     @Consumes({"image/jpeg"})
     @Produces (MediaType. APPLICATION_JSON)
-   	public Response addImage( InputStream inputStream) 
+   	public Response addImage( InputStream inputStream, @QueryParam("token") UUID uuid) 
    	{
-    	// no check if User has Access due to ease of use - Security risk
+    	if( accessManager.hasAccess(uuid) == false )
+		{
+			throw new RuntimeException("ERROR: Access not granted");
+		}
+    	Optional<User> user =accessManager.getUser(uuid);
+		if(user.isPresent()) {
+			User Nutzer = user.get();
+	
 		byte[] content;
 		try {
 			content = inputStream.readAllBytes();
 			int imageId = imageDAO.addImage(content);
-			System.out.println(imageId);
-	    	return Response.ok().entity(imageId).build();
+			Nutzer.setImageId(imageId);
+			System.out.println("Image updated für "+Nutzer.getUserId()+ " als " + imageId);
+	    	return Response.ok().build();
 		} catch (IOException e) {
 			System.out.println("ERROR "+e.getMessage());
 		 return Response.status(404).build();
 		}
+		}
+		return Response.status(404).build();
    	}
   
 }

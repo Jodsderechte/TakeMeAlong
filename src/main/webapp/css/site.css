@@ -31,6 +31,36 @@ body {
     ;	
 }
 
+#logInAnordnung{
+	display: grid; 
+    grid-template-areas:  
+      "WebsiteNameText	loginUser	loginPasswort	loginError	LoginButtons" 
+    ;	
+}
+
+.WebsiteName-text{
+	white-space:nowrap;
+	font-weight:bold;
+	font-size: xx-large;
+}
+
+#WebsiteNamediv{
+	grid-area: WebsiteNameText;	
+}
+#LoginUser{
+	grid-area: loginUser;
+}
+#loginPasswort{
+	grid-area: loginPasswort;
+}
+#LoginButtons{
+	grid-area: loginButtons;
+}
+
+#ErrorLogin{
+	color:red;
+	grid-area: loginError;
+}
 .WebsiteName{
 	grid-area: WebsiteName;
 }
@@ -181,15 +211,7 @@ span + span {
 table{
 	white-space:nowrap;
 }
-.WebsiteName-text{
-	float: left;
-	margin-right: 100px;	
-}
-.Register{
-	float: right;	
-	margin-left: 100px;
-	
-}
+
 #Straße{
 	width:85px;
 }
@@ -206,9 +228,6 @@ table{
 	width: 170px;
 }
 #registerError{
-	color:red;
-}
-#loginError{
 	color:red;
 }
 #suchenError{

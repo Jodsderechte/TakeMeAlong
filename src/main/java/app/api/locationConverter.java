@@ -36,14 +36,18 @@ public class locationConverter {
 
 	@Inject
 	private AccessManager accessManager;
-	@Inject
-	private UserDAO userDAO;
+
 	@Inject
 	private GeoCoderImpl geocode;
 	
 	 	@GET
-		public PositionDto getLocationforUser(@QueryParam("streetNr")String streetNr, @QueryParam("street")String street, @QueryParam("postalcode")String zip, @QueryParam("city")String city, @QueryParam("country")String country) 
+		public PositionDto getLocationforUser(@QueryParam("streetNr")String streetNr, @QueryParam("street")String street, @QueryParam("postalcode")String zip, @QueryParam("city")String city, @QueryParam("country")String country, @QueryParam("token")UUID uuid) 
 		{	
+	 		if( accessManager.hasAccess(uuid) == false )
+			{
+				throw new RuntimeException("ERROR: Access not granted");
+			}
+	 		
 		 	Optional<Position> result = geocode.geocode(street, streetNr, zip, city, country);
 		 	
 		 	if(result.isPresent()) {
