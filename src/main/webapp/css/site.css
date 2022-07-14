@@ -33,25 +33,25 @@ body {
 }
 
 .WebsiteName{
-	grid-area: WebsiteName
+	grid-area: WebsiteName;
 }
 
 .logoutButton{
-	grid-area: logout
+	grid-area: logout;
 }
 
 .StundenplanButton{
-	grid-area: Stundenplan
+	grid-area: Stundenplan;
 }
 .KartenButton{
-	grid-area: Karte
+	grid-area: Karte;
 }
 .logoutError{
-	grid-area: logoutError
+	grid-area: logoutError;
 }
 
 .ProfileImage{
-	grid-area: ProfileImage
+	grid-area: ProfileImage;
 }
 
 .StundenplanContainer{
@@ -62,6 +62,54 @@ body {
 	height: 60%;
 	overflow-y: scroll;	
 }
+
+#in{
+	height: 33%;
+	grid-template-rows:  min-content 1fr; 
+    grid-template-columns: 1fr min-content;
+    grid-template-areas:  
+      "MitFahrTitel" 
+      "FahrartForm" 
+      "Umkreis"
+      "Wochentag"
+      "Timehin"
+      "Timeback"
+    ; 
+    background: #d3d3d3;
+}
+
+#Suchen{
+	 position: absolute;
+  	top: 50%;
+  	-ms-transform: translateY(-50%);
+ 	 transform: translateY(-50%);
+}
+
+#MitfahrgelegenheitTitel{
+	grid-area: MitFahrTitel;
+}
+
+#FahrartForm{
+	grid-area: FahrartForm;
+	margin: 0px 10px 10px 10px;
+}
+#Umkreis2{
+	grid-area: Umkreis;
+	margin: 0px 10px 10px 10px;
+}
+#Wochentag2{
+	grid-area: Wochentag;
+	margin: 0px 10px 10px 10px;
+}
+#TimeHin{
+	grid-area: Timehin;
+	margin: 0px 10px 10px 10px;
+}
+#TimeBack{
+	grid-area: Timeback;
+	margin: 0px 10px 10px 10px;
+}
+
 .MitfahrgelegenheitenOutput{
 	border:1px solid black;
 	background:	#FFFFFF;  
@@ -145,6 +193,9 @@ table{
 	color:red;
 }
 #loginError{
+	color:red;
+}
+#suchenError{
 	color:red;
 }
 #RegisterContainer {

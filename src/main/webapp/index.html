@@ -29,7 +29,7 @@
 					<tr> <td>PLZ</td> <td><input type = "number" id = "PLZ" name = "PLZ" placeholder="66482"><span id= "VornameCheck"></span> Ort.<input type = "text" id = "Ort" name = "Ort" placeholder="Zweibrücken" list="Orte"><datalist id="Orte"></datalist> <span id= "PLZCheck">&#10060;</span></td></tr>
 					<tr> <td>E-Mail</td> <td><input type = "email" id = "EMail" name = "EMail" placeholder="MusterMail@hs-kl.de" > <span id= "MailCheck">&#10060;</span></td></tr>
 					<tr> <td>Profilbild</td> <td> <input type = "file" id = "Profilbild" name = "Profilbild" ></td></tr>
-					<tr> <td>Benutzer-ID</td> <td> <input type = "text" id = "BenutzerID" name = "BenutzerID" placeholder="TolleId" ></td></tr>
+					<tr> <td>Benutzer-ID</td> <td> <input type = "text" id = "BenutzerID" name = "BenutzerID" placeholder="TolleId" > <span id= "UserCheck">&#10060;</span></td></tr>
 					<tr> <td>Passwort</td> <td> <input  type = "password" id = "Passwort" name = "Passwort" placeholder="Geheim" ></td></tr>
 					<tr><td>Sicherheit des Passworts</td><td><canvas id="pwdCanvas" width="100" height="10"style="border: 1px solid #d3d3d3;"></canvas><span id="PasswortError"></span></td></tr>
 					<tr> <td><button id= "Registrieren">Registrieren</button> <button id = "CancelRegister">Abbrechen</button> </td><td><span id="registerError"></span></td> </tr>
@@ -88,8 +88,8 @@
 		</article>
 		<aside id=aside>
 		<div id="in">
-          <h3>Eine Mitfahrgelegenheit suchen</h3>
-          <form name="myForm">
+          <h3 id = "MitfahrgelegenheitTitel">Eine Mitfahrgelegenheit suchen</h3>
+          <form name="myForm" id= FahrartForm>
          		<input type="radio" id="hinfahrt" onclick="fahrtArtSelect()" name="Fahrart" value="1">
   				<label for="Hinfahrt">nur Hinfahrt</label><br>
   				<input type="radio" id="Rückfahrt" onclick="fahrtArtSelect()" name="Fahrart" value="2">
@@ -97,9 +97,9 @@
   				<input type="radio" id="Beides" onclick="fahrtArtSelect()" name="Fahrart" value="3">
   				<label for="Beides">Hin-/Rückfahrt</label> <br>
 			</form>
-         		<span style="white-space: nowrap"> Umkreis in KM: <input
+         		<span style="white-space: nowrap" id =Umkreis2> Umkreis in KM: <input
 					id="Umkreis" type="Number" name="Umkreis" required /></span> <br>
-				<label for="Wochentag">Wochentag:</label>
+				<label for="Wochentag" id="Wochentag2">Wochentag:</label>
 					<select name="Wochentag" id="Wochentag">
 					  <option value="1">Montag</option>
 					  <option value="2">Dienstag</option>
@@ -112,14 +112,14 @@
 					id="ZeitHin" type="time" name="Zeit" required /> </span>
 					</div>
 					<div id= "TimeBack" class= "hidden">
-				<span style="white-space: nowrap"> Späteste Ankunft Rückfahrt: <input
+				<span style="white-space: nowrap"> Frühste Abfahrt Rückfahrt: <input
 					id="ZeitZurück" type="time" name="Zeit" required /> </span>	
 				</div>
 				<br>
-				<button class=Suchen id="Suchen"type="button" style="width: 100px;">Suchen</button>
 				
     	</div>
-    	<h3>Ergebnisse</h3>
+    	<button class=Suchen id="Suchen"type="button" style="width: 100px;">Suchen</button>
+    	<h3>Ergebnisse:</h3> <span id="suchenError"> </span>
           <div id="out">
           
           

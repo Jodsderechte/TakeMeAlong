@@ -15,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import app.api.access.AccessManager;
 import app.api.dto.Token;
@@ -56,6 +57,24 @@ public class UserController
 		    throw new RuntimeException("ERROR: User not found");
 	}
 	
+    
+    @GET
+    @Path("/CheckUser/{userName}")
+	public Response UserNameExists(@PathParam("userName") String userName) 
+	{
+    	try {
+		Optional<User> optUser = userDAO.findUser(userName);	
+		if( optUser.isPresent() )
+		{
+			return Response.status(404).build();
+		}
+		else
+			return Response.ok().build();
+	} catch (Exception e) {
+		return Response.ok().build();
+	}
+}   
+    
     @DELETE
     @Transactional
 	public boolean deleteUser(@QueryParam("token") UUID uuid)
